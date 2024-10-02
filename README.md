@@ -1,31 +1,30 @@
-Biblioteca de Manipulação de Grafos
+# Biblioteca de Manipulação de Grafos
 
-Descrição
-Este projeto consiste na implementação de uma biblioteca para manipulação de grafos em Python, com foco em diferentes representações de grafos e suas funcionalidades associadas. A biblioteca permite a criação e manipulação de grafos utilizando várias abordagens, além de fornecer algoritmos para verificação de propriedades e análise de conectividade.
+Este projeto consiste na implementação de uma biblioteca para manipulação de grafos em **Python**, permitindo a criação, manipulação e exportação de grafos em diferentes representações. A biblioteca também oferece algoritmos para verificação de propriedades e análise de conectividade, com suporte à exportação de grafos para visualização no **Gephi**.
 
-Funcionalidades
-Representação de Grafos
-A biblioteca suporta três formas de representação de grafos:
+## Funcionalidades
 
-Matriz de Adjacência: Representa as conexões entre vértices em uma matriz onde cada célula indica se há ou não uma aresta entre dois vértices.
-Matriz de Incidência: Usa uma matriz para representar as arestas em relação aos vértices, mostrando quais vértices estão conectados por quais arestas.
-Lista de Adjacência: Cada vértice é associado a uma lista que contém seus vértices adjacentes, permitindo um armazenamento mais eficiente de grafos esparsos.
-Operações de Manipulação
-A biblioteca implementa diversas operações para manipulação de grafos, incluindo:
+### Representações de Grafos
+- **Matriz de Adjacência**: Matriz que indica a presença de arestas entre os vértices.
+- **Matriz de Incidência**: Representa as arestas com relação aos vértices conectados.
+- **Lista de Adjacência**: Cada vértice é associado a uma lista com seus vértices adjacentes.
 
-Criação de Grafo: Permite criar grafos com um número de vértices definido pelo usuário.
-Manipulação de Arestas: Adição e remoção de arestas entre vértices.
-Rotulação e Ponderação: Atribuição de rótulos e pesos tanto para vértices quanto para arestas.
-Verificação de Adjacências: Checagem de adjacências entre vértices e entre arestas.
-Verificação de Existência de Arestas: Confirma se uma aresta específica existe entre dois vértices.
-Contagem de Componentes: Determinação da quantidade de vértices e arestas no grafo.
-Propriedades do Grafo: Checagem se o grafo é vazio, completo, ou se possui conectividade simples, semi-forte ou forte.
-Componentes Fortemente Conexos: Identificação de componentes fortemente conexos usando o algoritmo de Kosaraju.
-Detecção de Pontes e Articulações: Verifica se há arestas ou vértices cuja remoção desconecta o grafo.
-Exportação e Visualização
-A biblioteca oferece suporte à exportação de grafos para diferentes formatos de arquivos compatíveis com a ferramenta de visualização de grafos Gephi, permitindo a análise visual dos grafos manipulados. Os formatos suportados incluem:
+### Operações de Manipulação
+- **Criação de Grafos**: Defina o número de vértices ao criar um grafo.
+- **Adição e Remoção de Arestas**.
+- **Rotulação e Ponderação de Vértices e Arestas**.
+- **Verificação de Adjacência** entre vértices e arestas.
+- **Checagem de Propriedades do Grafo**: vazio, completo, conectividade simples, semi-forte, forte, entre outras.
+- **Identificação de Componentes Fortemente Conexos** com o algoritmo de Kosaraju.
+- **Detecção de Pontes e Articulações**: Verifica se a remoção de arestas ou vértices desconecta o grafo.
 
-GEXF
-GraphML
-GML
-GraphViz DOT
+### Exportação e Visualização
+Exporta os grafos criados para formatos suportados pelo Gephi, como:
+- **GEXF**
+- **GraphML**
+- **GML**
+- **GraphViz DOT**
+
+## Requisitos
+
+- **Python 3.x**
