@@ -1,3 +1,5 @@
+import random
+
 class Grafo:
     def __init__(self, num_vertices):
         self.num_vertices = num_vertices
@@ -176,3 +178,14 @@ class Grafo:
             self.adicionar_aresta(vertice, vizinho, peso)
 
         return not conexo_sem_vertice
+
+    # Função para gerar um grafo aleatório
+    def graforandom(self, num_arestas):
+        for _ in range(num_arestas):
+            u = random.randint(0, self.num_vertices - 1)
+            v = random.randint(0, self.num_vertices - 1)
+            while u == v or self.existe_aresta(u, v):
+                u = random.randint(0, self.num_vertices - 1)
+                v = random.randint(0, self.num_vertices - 1)
+            peso = random.randint(1, 10)  # Arestas com pesos aleatórios entre 1 e 10
+            self.adicionar_aresta(u, v, peso)
