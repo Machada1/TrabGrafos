@@ -4,21 +4,26 @@ class Grafo:
         self.matriz_adjacencia = [[0] * num_vertices for _ in range(num_vertices)]
         self.matriz_incidencia = []
         self.lista_adjacencia = {i: [] for i in range(num_vertices)}
+        self.matriz_vertice = [[vertice] for vertice in range(num_vertices)]
+        self.matriz_aresta = []
 
     # Adiciona uma aresta entre os vértices u e v
-    def adicionar_aresta(self, u, v, peso=1):
+    def adicionar_aresta(self, u, v):
+        #Matriz de aresta
+        self.matriz_aresta.append((u,v))
+
         # Matriz de Adjacência
-        self.matriz_adjacencia[u][v] = peso
-        self.matriz_adjacencia[v][u] = peso  # Se for um grafo não-direcionado
+        self.matriz_adjacencia[u][v] = 1
+        self.matriz_adjacencia[v][u] = 1  # Se for um grafo não-direcionado
 
         # Lista de Adjacência
-        self.lista_adjacencia[u].append((v, peso))
-        self.lista_adjacencia[v].append((u, peso))  # Se for um grafo não-direcionado
+        self.lista_adjacencia[u].append(v)
+        self.lista_adjacencia[v].append(u)  # Se for um grafo não-direcionado
 
         # Matriz de Incidência (implementação simples)
         aresta = [0] * self.num_vertices
-        aresta[u] = peso
-        aresta[v] = peso
+        aresta[u] = 1
+        aresta[v] = 1
         self.matriz_incidencia.append(aresta)
 
     # Remove uma aresta entre os vértices u e v
@@ -65,8 +70,8 @@ class Grafo:
             print(f"{vertice}: {adjacentes}")
 
     # Pondera e rotula vértices
-    def rotular_vertice(self, vertice, rotulo):
-        print(f"Vértice {vertice} rotulado como {rotulo}")
+#   def rotular_vertice(self, vertice, rotulo):
+#       self.matriz_vertice[vertice].append(rotulo) #n ta funcionando
 
     # Pondera e rotula arestas
     def rotular_aresta(self, u, v, rotulo):
