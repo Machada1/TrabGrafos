@@ -75,7 +75,15 @@ class Grafo:
     # Checa se dois vértices são adjacentes
     def sao_adjacentes(self, u, v):
         return self.matriz_adjacencia[u][v] != 0
+    # Checa se duas arestas são adjacentes
+    def sao_adjacentesE(self, u, v, x, y):
+    # Verifica se existe uma adjacência entre os vértices das arestas
+        if (u == x or u == y or v == x or v == y):
+            print("As arestas são adjacentes")
+        else:
+            print("As arestas não são adjacentes")
 
+            
     # Checa se uma aresta existe entre dois vértices
     def existe_aresta(self, u, v):
         return self.matriz_adjacencia[u][v] != 0
