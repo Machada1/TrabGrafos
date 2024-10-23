@@ -1,3 +1,5 @@
+import random
+
 class Grafo:
     def __init__(self, num_vertices):
         self.num_vertices = num_vertices
@@ -115,7 +117,6 @@ class Grafo:
 
     # Algoritmo de Kosaraju para componentes fortemente conexos
     def kosaraju(self):
-        # Algoritmo simplificado para detectar componentes fortemente conexos
         # Passo 1: DFS normal
         visitados = [False] * self.num_vertices
         ordem = []
@@ -176,3 +177,14 @@ class Grafo:
             self.adicionar_aresta(vertice, vizinho, peso)
 
         return not conexo_sem_vertice
+
+    # Função para gerar um grafo aleatório
+    def graforandom(self, num_arestas):
+        for _ in range(num_arestas):
+            u = random.randint(0, self.num_vertices - 1)
+            v = random.randint(0, self.num_vertices - 1)
+            print(f"Aresta adicionada: {u} - {v}")
+            while u == v or self.existe_aresta(u, v):
+                u = random.randint(0, self.num_vertices - 1)
+                v = random.randint(0, self.num_vertices - 1)
+            self.adicionar_aresta(u, v,)
