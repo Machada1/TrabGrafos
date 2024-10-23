@@ -184,8 +184,8 @@ class Grafo:
         for _ in range(num_arestas):
             u = random.randint(0, self.num_vertices - 1)
             v = random.randint(0, self.num_vertices - 1)
+            print(f"Aresta adicionada: {u} - {v}")
             while u == v or self.existe_aresta(u, v):
                 u = random.randint(0, self.num_vertices - 1)
                 v = random.randint(0, self.num_vertices - 1)
-            peso = random.randint(1, 10)  # Arestas com pesos aleatórios entre 1 e 10
-            self.adicionar_aresta(u, v, peso)
+            self.adicionar_aresta(u, v,)
