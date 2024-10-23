@@ -117,7 +117,6 @@ class Grafo:
 
     # Algoritmo de Kosaraju para componentes fortemente conexos
     def kosaraju(self):
-        # Algoritmo simplificado para detectar componentes fortemente conexos
         # Passo 1: DFS normal
         visitados = [False] * self.num_vertices
         ordem = []
