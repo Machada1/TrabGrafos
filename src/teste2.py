@@ -1,5 +1,6 @@
 from libGrafos import Grafo
 
+# Criação do grafo
 grafo = Grafo(9)
 grafo.adicionar_aresta(0, 1)
 grafo.adicionar_aresta(0, 2)
@@ -11,6 +12,22 @@ grafo.adicionar_aresta(5, 6)
 grafo.adicionar_aresta(6, 7)
 grafo.adicionar_aresta(7, 8)
 
-grafo.imprimir_matriz_adjacencia()
-grafo.imprimir_matriz_incidencia()
-grafo.imprimir_lista_adjacencia()
+# Rotulação e ponderação do grafo
+# grafo.rotular_aresta(0,1,"aresta 1")
+# grafo.rotular_vertice(0,'primeiro')
+
+# Teste de impreção
+# grafo.imprimir_matriz_aresta()
+# grafo.imprimir_matriz_vertice()
+# grafo.imprimir_lista_adjacencia()
+
+# Teste de manipulação
+# grafo.remover_aresta(0,1)
+
+# Impreção novamente
+# grafo.imprimir_matriz_aresta()
+# grafo.imprimir_matriz_adjacencia()
+# grafo.imprimir_matriz_incidencia()
+# grafo.imprimir_lista_adjacencia()
+
+grafo.sao_adjacentes(0,1)
