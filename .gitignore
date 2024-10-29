@@ -1,0 +1,9 @@
+# ignora os arquivos com extensões 
+.gitignore
+# ignora quaisquer diretórios chamados "metadata"
+.metadata/
+.recommenders/
+
+# ignora os arquivos gerados no pycache
+.__pycache__/
+__pycache__
