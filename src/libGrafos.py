@@ -342,4 +342,8 @@ class Grafo:
             f.write('  </graph>\n')
             f.write('</gexf>\n')
 =======
+<<<<<<< HEAD
+>>>>>>> 1d21977d7ce2ca59c1c42ac3e12248dd5dde35dd
+=======
 >>>>>>> 42cfc1eff048b6d73358e049ec6a6ccae90d99be
+>>>>>>> 4bb545c07592c6f039da88d5be4b76dd7ac78881
