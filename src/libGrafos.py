@@ -227,8 +227,107 @@ class Grafo:
         for _ in range(num_arestas):
             u = random.randint(0, self.num_vertices - 1)
             v = random.randint(0, self.num_vertices - 1)
-            print(f"Aresta adicionada: {u} - {v}")
+            # print(f"Aresta adicionada: {u} - {v}")
             while u == v or self.existe_aresta(u, v):
                 u = random.randint(0, self.num_vertices - 1)
                 v = random.randint(0, self.num_vertices - 1)
             self.adicionar_aresta(u, v,)
+<<<<<<< HEAD
+
+
+            # Método ingênuo para detectar pontes
+    def detectar_ponte_naive(self):
+        pontes = []
+        for u in range(self.num_vertices):
+            for v in range(u + 1, self.num_vertices):
+                if self.existe_aresta(u, v):
+                    self.remover_aresta(u, v)
+                    if not self.e_conexo():
+                        pontes.append((u, v))
+                    self.adicionar_aresta(u, v)  # Restaurar aresta
+        return pontes
+    
+        
+    def tarjan_ponte_util(self, u, visitados, disc, low, parent, pontes):
+        visitados[u] = True
+        disc[u] = low[u] = self.time
+        self.time += 1
+
+        for v, peso in self.lista_adjacencia[u]:
+            if not visitados[v]:  # v não visitado
+                parent[v] = u
+                self.tarjan_ponte_util(v, visitados, disc, low, parent, pontes)
+
+                low[u] = min(low[u], low[v])
+
+                # Se o menor vértice alcançável a partir de v for
+                # abaixo de u em DFS, então u-v é uma ponte
+                if low[v] > disc[u]:
+                    pontes.append((u, v))
+
+            elif v != parent[u]:  # Atualiza low[u] para o caso de um ciclo
+                low[u] = min(low[u], disc[v])
+
+    def detectar_ponte_tarjan(self):
+        visitados = [False] * self.num_vertices
+        disc = [float("inf")] * self.num_vertices
+        low = [float("inf")] * self.num_vertices
+        parent = [-1] * self.num_vertices
+        pontes = []
+        self.time = 0
+
+        for i in range(self.num_vertices):
+            if not visitados[i]:
+                self.tarjan_ponte_util(i, visitados, disc, low, parent, pontes)
+
+        return pontes
+
+    def euleriano(self):
+        impares = 0
+        for u in range(self.num_vertices):
+            grau = len(self.lista_adjacencia[u])
+            if grau % 2 != 0:
+                impares += 1
+        return impares == 0 or impares == 2
+
+    def fleury(self):
+        if not self.euleriano():
+            print("O grafo não é euleriano.")
+            return None
+
+        caminho = []
+        arestas_removidas = []
+
+        def dfs(u):
+            for v, peso in self.lista_adjacencia[u]:
+                if (u, v) not in arestas_removidas and (v, u) not in arestas_removidas:
+                    arestas_removidas.append((u, v))
+                    dfs(v)
+                    caminho.append((u, v))
+
+        dfs(0)  # Começa do vértice 0
+        return caminho
+
+    def salvar_grafo_gexf(self, nome_arquivo):
+        with open(nome_arquivo, 'w') as f:
+            f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+            f.write('<gexf xmlns="http://www.gexf.net/1.3draft"\n')
+            f.write('     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n')
+            f.write('     xsi:schemaLocation="http://www.gexf.net/1.3draft http://www.gexf.net/1.3draft/gexf.xsd">\n')
+            f.write('  <graph mode="static" defaultedgetype="undirected">\n')
+            f.write('    <nodes>\n')
+            for i in range(self.num_vertices):
+                f.write(f'      <node id="{i}" label="{i}"/>\n')
+            f.write('    </nodes>\n')
+            f.write('    <edges>\n')
+            edge_id = 0
+            for u in range(self.num_vertices):
+                for v, peso in self.lista_adjacencia[u]:
+                    if u < v:  # Para não duplicar arestas
+                        f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" weight="{peso}"/>\n')
+                        edge_id += 1
+            f.write('    </edges>\n')
+            f.write('  </graph>\n')
+            f.write('</gexf>\n')
+=======
+>>>>>>> 1d21977d7ce2ca59c1c42ac3e12248dd5dde35dd
