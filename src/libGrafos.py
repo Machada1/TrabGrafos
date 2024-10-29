@@ -104,23 +104,12 @@ class Grafo:
 
     # Checa se dois vértices são adjacentes
     def sao_adjacentes(self, u, v):
-<<<<<<< HEAD
         if self.matriz_adjacencia[u][v] != 0:
             print(f"Os vertices {u} e {v} são adjacentes")
             return True
         else:
             print(f"Os vertices {u} e {v} não são adjacentes")
             return False
-=======
-        return self.matriz_adjacencia[u][v] != 0
-    # Checa se duas arestas são adjacentes
-    def sao_adjacentesE(self, u, v, x, y):
-    # Verifica se existe uma adjacência entre os vértices das arestas
-        if (u == x or u == y or v == x or v == y):
-            print("As arestas são adjacentes")
-        else:
-            print("As arestas não são adjacentes")
->>>>>>> bfd8125e2c07c6fad9ac9b7276fd6ef22d3ced64
 
             
     # Checa se uma aresta existe entre dois vértices
@@ -244,7 +233,6 @@ class Grafo:
                 u = random.randint(0, self.num_vertices - 1)
                 v = random.randint(0, self.num_vertices - 1)
             self.adicionar_aresta(u, v,)
-<<<<<<< HEAD
 
 
             # Método ingênuo para detectar pontes
@@ -341,9 +329,3 @@ class Grafo:
             f.write('    </edges>\n')
             f.write('  </graph>\n')
             f.write('</gexf>\n')
-=======
-<<<<<<< HEAD
->>>>>>> 1d21977d7ce2ca59c1c42ac3e12248dd5dde35dd
-=======
->>>>>>> 42cfc1eff048b6d73358e049ec6a6ccae90d99be
->>>>>>> 4bb545c07592c6f039da88d5be4b76dd7ac78881

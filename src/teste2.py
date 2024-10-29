@@ -12,7 +12,6 @@ grafo.adicionar_aresta(5, 6)
 grafo.adicionar_aresta(6, 7)
 grafo.adicionar_aresta(7, 8)
 
-<<<<<<< HEAD
 # Rotulação e ponderação do grafo
 # grafo.rotular_aresta(0,1,"aresta 1")
 # grafo.rotular_vertice(0,'primeiro')
@@ -32,9 +31,3 @@ grafo.adicionar_aresta(7, 8)
 # grafo.imprimir_lista_adjacencia()
 
 grafo.sao_adjacentes(0,1)
-=======
-grafo.imprimir_matriz_adjacencia()
-grafo.imprimir_matriz_incidencia()
-grafo.imprimir_lista_adjacencia()
-grafo.sao_adjacentesE(0,1,2,3)
->>>>>>> bfd8125e2c07c6fad9ac9b7276fd6ef22d3ced64
