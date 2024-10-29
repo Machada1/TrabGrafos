@@ -30,4 +30,4 @@ grafo.adicionar_aresta(7, 8)
 # grafo.imprimir_matriz_incidencia()
 # grafo.imprimir_lista_adjacencia()
 
-grafo.sao_adjacentes(0,1)
+# grafo.sao_adjacentes(0,1)

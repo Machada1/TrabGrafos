@@ -1,5 +1,30 @@
 import random
 
+class Vertice:
+    def __init__(self, indice, rotulo=None, peso=None):
+        self.indice = indice
+        self.rotulo = rotulo
+        self.peso = peso
+    
+    def rotularVertice(self, rotulo):
+        self.rotulo = rotulo 
+
+    def ponderarVertice(self, peso):
+        self.peso = peso 
+
+class Aresta:
+    def __init__(self, saida, chegada, rotulo=None, peso=1):
+        self.Vsaida = saida
+        self.Vchegada = chegada
+        self.rotulo = rotulo
+        self.peso = peso
+
+    def rotularAresta(self, rotulo):
+        self.rotulo = rotulo
+
+    def ponderarAresta(self, peso):
+        self.peso = peso
+
 class Grafo:
     def __init__(self, num_vertices):
         self.num_vertices = num_vertices
