@@ -6,11 +6,14 @@ class Vertice:
         self.rotulo = rotulo
         self.peso = peso
     
-    def rotularVertice(self, rotulo):
+    def rotular_vertice(self, rotulo):
         self.rotulo = rotulo 
 
-    def ponderarVertice(self, peso):
+    def ponderar_vertice(self, peso):
         self.peso = peso 
+
+    def imprimir_vertice(self):
+        print(f'Vertice: {self.indice}, Rotulo: {self.rotulo}, Peso: {self.peso}')
 
 class Aresta:
     def __init__(self, saida, chegada, rotulo=None, peso=1):
@@ -19,21 +22,44 @@ class Aresta:
         self.rotulo = rotulo
         self.peso = peso
 
-    def rotularAresta(self, rotulo):
+    def rotular_aresta(self, rotulo):
         self.rotulo = rotulo
 
-    def ponderarAresta(self, peso):
+    def ponderar_aresta(self, peso):
         self.peso = peso
 
 class Grafo:
     def __init__(self, num_vertices):
         self.num_vertices = num_vertices
         self.num_arestas = 0
+        self.array_vertices = []
+        self.array_arestas = []
+        for i in range(num_vertices):
+            self.array_vertices.append(Vertice(i))
         self.matriz_adjacencia = [[0] * num_vertices for _ in range(num_vertices)]
         self.matriz_incidencia = []
         self.lista_adjacencia = {i: [] for i in range(num_vertices)}
-        self.matriz_vertice = [[vertice] for vertice in range(num_vertices)]
-        self.matriz_aresta = []
+
+    # Rotula os vertices do grafo
+    def rotular_vertices(self,rotulos):
+        if len(rotulos) == len(self.array_vertices):
+            for i,rotulo in enumerate(rotulos):
+                self.array_vertices[i].rotular_vertice(rotulo)
+        else:
+            print(f'A quantidade de rotulos fornecida não condiz com a quantidade de vertices do grafo. Faltam {len(self.array_vertices)-len(rotulos)} rotulos')
+
+    # Pondera os vertices do grafo
+    def ponderar_vertices(self,pesos):
+        if len(pesos) == len(self.array_vertices):
+            for i,peso in enumerate(pesos):
+                self.array_vertices[i].ponderar_vertice(peso)
+        else:
+            print(f'A quantidade de pesos fornecida não condiz com a quantidade de vertices do grafo. Faltam {len(self.array_vertices)-len(pesos)} pesos')
+
+    # Imprime os vertices do grafo com seus rotulos e pesos
+    def imprimir_vertices(self):
+        for i in range(len(self.array_vertices)):
+            self.array_vertices[i].imprimir_vertice()
 
     # Adiciona uma aresta entre os vértices u e v
     def adicionar_aresta(self, u, v):
@@ -109,24 +135,6 @@ class Grafo:
         for vertice, adjacentes in self.lista_adjacencia.items():
             print(f"{vertice}: {adjacentes}")
 
-    # Método para imprimir matriz de arestas
-    def imprimir_matriz_aresta(self):
-        print(self.matriz_aresta)
-
-    # Método para imprimir matriz de vertices
-    def imprimir_matriz_vertice(self):
-        print(self.matriz_vertice)
-
-    # Rotula vértices
-    def rotular_vertice(self, vertice, rotulo):
-        self.matriz_vertice[vertice].append(rotulo)
-
-    # Rotula arestas
-    def rotular_aresta(self, u, v, rotulo):
-        for indice,aresta in enumerate(self.matriz_aresta):
-            if aresta[0]==(u,v):
-                self.matriz_aresta[indice].append(rotulo)
-
     # Checa se dois vértices são adjacentes
     def sao_adjacentes(self, u, v):
         if self.matriz_adjacencia[u][v] != 0:
@@ -162,7 +170,7 @@ class Grafo:
             print('O grafo não está vazio')
         else :
             print('O grafo está vazio')
-        return self.num_arestas
+        return self.num_arestas > 0
 
     # Checa se o grafo é completo
     def grafo_completo(self):
