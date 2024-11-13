@@ -141,6 +141,24 @@ class Grafo:
         for vertice, adjacentes in self.lista_adjacencia.items():
             print(f"{vertice}: {adjacentes}")
 
+    # Método para imprimir matriz de arestas
+    def imprimir_matriz_aresta(self):
+        print(self.matriz_aresta)
+
+    # Método para imprimir matriz de vertices
+    def imprimir_matriz_vertice(self):
+        print(self.matriz_vertice)
+
+    # Rotula vértices
+    def rotular_vertice(self, vertice, rotulo):
+        self.matriz_vertice[vertice].append(rotulo)
+
+    # Rotula arestas
+    def rotular_aresta(self, u, v, rotulo):
+        for indice,aresta in enumerate(self.matriz_aresta):
+            if aresta[0]==(u,v):
+                self.matriz_aresta[indice].append(rotulo)
+
     # Checa se dois vértices são adjacentes
     def sao_adjacentes(self, u, v):
         if self.matriz_adjacencia[u][v] != 0:
@@ -176,7 +194,7 @@ class Grafo:
             print('O grafo não está vazio')
         else :
             print('O grafo está vazio')
-        return self.num_arestas > 0
+        return self.num_arestas
 
     # Checa se o grafo é completo
     def grafo_completo(self):
@@ -274,7 +292,7 @@ class Grafo:
             self.adicionar_aresta(u, v,)
 
 
-            # Método ingênuo para detectar pontes
+    # Método ingênuo para detectar pontes
     def detectar_ponte_naive(self):
         pontes = []
         for u in range(self.num_vertices):
