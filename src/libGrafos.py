@@ -1,5 +1,36 @@
 import random
 
+class Vertice:
+    def __init__(self, indice, rotulo=None, peso=None):
+        self.indice = indice
+        self.rotulo = rotulo
+        self.peso = peso
+    
+    def rotular_vertice(self, rotulo):
+        self.rotulo = rotulo 
+
+    def ponderar_vertice(self, peso):
+        self.peso = peso 
+
+    def imprimir_vertice(self):
+        print(f'Vertice: {self.indice}, Rotulo: {self.rotulo}, Peso: {self.peso}')
+
+class Aresta:
+    def __init__(self, saida, chegada, rotulo=None, peso=1):
+        self.Vsaida = saida
+        self.Vchegada = chegada
+        self.rotulo = rotulo
+        self.peso = peso
+
+    def rotular_aresta(self, rotulo):
+        self.rotulo = rotulo
+
+    def ponderar_aresta(self, peso):
+        self.peso = peso
+    
+    def imprimir_aresta(self):
+        print(f'Aresta: ({self.Vsaida,self.Vchegada}), Rotulo: {self.rotulo}, Peso: {self.peso}')
+
 class Grafo:
     def __init__(self, num_vertices):
         self.num_vertices = num_vertices
@@ -11,8 +42,30 @@ class Grafo:
         self.matriz_adjacencia = [[0] * num_vertices for _ in range(num_vertices)]
         self.matriz_incidencia = []
         self.lista_adjacencia = {i: [] for i in range(num_vertices)}
-        self.matriz_vertice = [[vertice] for vertice in range(num_vertices)]
-        self.matriz_aresta = []
+
+    # Rotula os vertices do grafo
+    def rotular_vertices(self,rotulos):
+        if self.elementos_unicos:
+            if len(rotulos) == len(self.array_vertices):
+                for i,rotulo in enumerate(rotulos):
+                    self.array_vertices[i].rotular_vertice(rotulo)
+            else:
+                print(f'A quantidade de rotulos fornecida não condiz com a quantidade de vertices do grafo. Faltam {len(self.array_vertices)-len(rotulos)} rotulos')
+        else :
+            print(f'O vetor de rotulos possui dois ou mais rotulos iguais')
+
+    # Pondera os vertices do grafo
+    def ponderar_vertices(self,pesos):
+        if len(pesos) == len(self.array_vertices):
+            for i,peso in enumerate(pesos):
+                self.array_vertices[i].ponderar_vertice(peso)
+        else:
+            print(f'A quantidade de pesos fornecida não condiz com a quantidade de vertices do grafo. Faltam {len(self.array_vertices)-len(pesos)} pesos')
+
+    # Imprime os vertices do grafo com seus rotulos e pesos
+    def imprimir_vertices(self):
+        for i in range(len(self.array_vertices)):
+            self.array_vertices[i].imprimir_vertice()
 
     # Adiciona uma aresta entre os vértices u e v
     def adicionar_aresta(self, u, v):
@@ -333,3 +386,6 @@ class Grafo:
             f.write('    </edges>\n')
             f.write('  </graph>\n')
             f.write('</gexf>\n')
+
+    def elementos_unicos(self,vetor):
+        return len(vetor) == len(set(vetor))
