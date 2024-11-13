@@ -17,6 +17,7 @@ class Vertice:
 
 class Aresta:
     def __init__(self, saida, chegada, rotulo=None, peso=1):
+        self.indice = (saida,chegada)
         self.Vsaida = saida
         self.Vchegada = chegada
         self.rotulo = rotulo
@@ -69,9 +70,15 @@ class Grafo:
 
     # Adiciona uma aresta entre os vértices u e v
     def adicionar_aresta(self, u, v):
-        if u<self.num_vertices and v<self.num_vertices:
+        aresta_temp = (u,v)
+        indices_vertices = [vertice.indice for vertice in self.array_vertices]
+        for aresta in self.array_arestas:
+            if aresta.indice == aresta_temp:
+                print(f'A aresta ({u,v}) já existe')
+                return
+        if u in indices_vertices and v in indices_vertices:
             #Matriz de aresta
-            self.matriz_aresta.append([(u,v)])
+            self.array_arestas.append(aresta)
 
             # Matriz de Adjacência
             self.matriz_adjacencia[u][v] = 1
