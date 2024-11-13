@@ -27,6 +27,9 @@ class Aresta:
 
     def ponderar_aresta(self, peso):
         self.peso = peso
+    
+    def imprimir_aresta(self):
+        print(f'Aresta: ({self.Vsaida,self.Vchegada}), Rotulo: {self.rotulo}, Peso: {self.peso}')
 
 class Grafo:
     def __init__(self, num_vertices):
@@ -42,11 +45,14 @@ class Grafo:
 
     # Rotula os vertices do grafo
     def rotular_vertices(self,rotulos):
-        if len(rotulos) == len(self.array_vertices):
-            for i,rotulo in enumerate(rotulos):
-                self.array_vertices[i].rotular_vertice(rotulo)
-        else:
-            print(f'A quantidade de rotulos fornecida não condiz com a quantidade de vertices do grafo. Faltam {len(self.array_vertices)-len(rotulos)} rotulos')
+        if self.elementos_unicos:
+            if len(rotulos) == len(self.array_vertices):
+                for i,rotulo in enumerate(rotulos):
+                    self.array_vertices[i].rotular_vertice(rotulo)
+            else:
+                print(f'A quantidade de rotulos fornecida não condiz com a quantidade de vertices do grafo. Faltam {len(self.array_vertices)-len(rotulos)} rotulos')
+        else :
+            print(f'O vetor de rotulos possui dois ou mais rotulos iguais')
 
     # Pondera os vertices do grafo
     def ponderar_vertices(self,pesos):
@@ -362,3 +368,6 @@ class Grafo:
             f.write('    </edges>\n')
             f.write('  </graph>\n')
             f.write('</gexf>\n')
+
+    def elementos_unicos(self,vetor):
+        return len(vetor) == len(set(vetor))
