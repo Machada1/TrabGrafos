@@ -41,12 +41,12 @@ class Grafo:
             self.array_vertices.append(Vertice(i))
         self.array_arestas = []
         self.matriz_adjacencia = [[0] * num_vertices for _ in range(num_vertices)]
-        self.matriz_incidencia = []
+        self.matriz_incidencia = [[vertice] for vertice in self.array_vertices]
         self.lista_adjacencia = {vertice: [] for vertice in self.array_vertices}
 
     # Rotula os vertices do grafo
     def rotular_vertices(self,rotulos):
-        if self.elementos_unicos:
+        if self.elementos_unicos(rotulos):
             if len(rotulos) == len(self.array_vertices):
                 for i,rotulo in enumerate(rotulos):
                     self.array_vertices[i].rotular_vertice(rotulo)
@@ -97,10 +97,11 @@ class Grafo:
                     self.lista_adjacencia[vertice].append(u)
 
             # Matriz de Incidência (implementação simples)
-            aresta = [0] * self.num_vertices
-            aresta[u] = 1
-            aresta[v] = 1
-            self.matriz_incidencia.append(aresta)
+            for vertice in self.matriz_incidencia:
+                if vertice[0] == u or vertice[0] == v:
+                    self.matriz_incidencia[vertice].append(1)
+                else:
+                    self.matriz_incidencia[vertice].append(0)
 
             self.num_arestas = self.num_arestas + 1
             
@@ -112,15 +113,16 @@ class Grafo:
 
         if self.achar_aresta(aresta) != -1:
             A = self.array_arestas[self.achar_aresta(aresta)]
+            u = A.V1
+            v = A.V2
 
             # Matriz de Adjacência
             self.matriz_adjacencia[A.V1.indice][A.V2.indice] = 0
             self.matriz_adjacencia[A.V2.indice][A.V1.indice] = 0
 
             # Lista de Adjacência
-            self.lista_adjacencia[u] = [vert for vert in self.lista_adjacencia[u] if vert != v]
-            self.lista_adjacencia[v] = [vert for vert in self.lista_adjacencia[v] if vert != u]
-
+            self.lista_adjacencia[u] = self.lista_adjacencia[u].remove(v)
+            self.lista_adjacencia[v] = self.lista_adjacencia[u].remove(u)
             # Matriz de Incidência
             for aresta in self.matriz_incidencia:
                 if aresta[u] != 0 and aresta[v] != 0:
@@ -166,14 +168,17 @@ class Grafo:
 
     # Checa se duas arestas são adjacentes
     def sao_adjacentesA(self, aresta1, aresta2):
-        u=self.array_arestas[self.achar_aresta(aresta1)]
-        v=self.array_arestas[self.achar_aresta(aresta2)]
-        if u.V1 == v.V1 or u.V1 == v.V2 or u.V2 == v.V1 or u.V2 == v.V2:
-            print(f"As arestas {aresta1} e {aresta2} são adjacentes")
-            return True
+        if self.achar_aresta(aresta1) != -1 and self.achar_aresta(aresta2) != -1:
+            u=self.array_arestas[self.achar_aresta(aresta1)]
+            v=self.array_arestas[self.achar_aresta(aresta2)]
+            if u.V1 == v.V1 or u.V1 == v.V2 or u.V2 == v.V1 or u.V2 == v.V2:
+                print(f"As arestas {aresta1} e {aresta2} são adjacentes")
+                return True
+            else:
+                print(f"As arestas {aresta1} e {aresta2} não são adjacentes")
+                return False
         else:
-            print(f"As arestas {aresta1} e {aresta2} não são adjacentes")
-            return False
+            print("Alguma das arestas fornecidas não existe, logo elas não são adjacentes")
             
     # Checa se uma aresta existe entre dois vértices
     def existe_aresta(self, u, v):
@@ -181,7 +186,7 @@ class Grafo:
             print(f"A aresta ({u},{v}) existe")
             return True
         else :
-            print(f"A aresta ({u},{v}) existe")
+            print(f"A aresta ({u},{v}) não existe")
             return False 
         
     # Checa o número de vértices
