@@ -280,16 +280,36 @@ class Grafo:
 
         return not conexo_sem_vertice
 
-    # Função para gerar um grafo aleatório
+    # # Função para gerar um grafo aleatório
+    # def graforandom(self, num_arestas):
+    #     for _ in range(num_arestas):
+    #         u = random.randint(0, self.num_vertices - 1)
+    #         v = random.randint(0, self.num_vertices - 1)
+    #         # print(f"Aresta adicionada: {u} - {v}")
+    #         while u == v or self.existe_aresta(u, v):
+    #             u = random.randint(0, self.num_vertices - 1)
+    #             v = random.randint(0, self.num_vertices - 1)
+    #         self.adicionar_aresta(u, v,)
+
     def graforandom(self, num_arestas):
+        if num_arestas > (self.num_vertices * (self.num_vertices - 1)) // 2:
+            print("Número de arestas excede o máximo possível para um grafo simples.")
+            return
+
         for _ in range(num_arestas):
             u = random.randint(0, self.num_vertices - 1)
             v = random.randint(0, self.num_vertices - 1)
-            # print(f"Aresta adicionada: {u} - {v}")
-            while u == v or self.existe_aresta(u, v):
+            
+            # Garante que a aresta não é repetida 
+            while u == v or any((u, v) == (aresta[0], aresta[1]) or (u, v) == (aresta[1], aresta[0]) for aresta in self.matriz_aresta):
                 u = random.randint(0, self.num_vertices - 1)
                 v = random.randint(0, self.num_vertices - 1)
-            self.adicionar_aresta(u, v,)
+            
+            # Adiciona a aresta
+            self.adicionar_aresta(u, v)
+
+        print(f"Grafo aleatório gerado com {num_arestas} arestas.")
+
 
 
     # Método ingênuo para detectar pontes
