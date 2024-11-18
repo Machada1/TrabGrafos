@@ -266,10 +266,10 @@ class Grafo:
         return componentes
 
     # Checa se há uma ponte (aresta cuja remoção desconecta o grafo)
-    def e_ponte(self, u, v):
-        self.remover_aresta(u, v)
+    def e_ponte(self, aresta):
+        self.remover_aresta(aresta)
         conexo_sem_aresta = self.e_conexo()
-        self.adicionar_aresta(u, v)  # Restaurar aresta
+        self.adicionar_aresta(aresta)  # Restaurar aresta
         return not conexo_sem_aresta
 
     # Checa se um vértice é um ponto de articulação (vértice cuja remoção desconecta o grafo)
