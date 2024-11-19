@@ -45,7 +45,7 @@ class Grafo:
 
     # Rotula os vertices do grafo
     def rotular_vertices(self,rotulos):
-        if self.elementos_unicos:
+        if self.elementos_unicos():
             if len(rotulos) == len(self.array_vertices):
                 for i,rotulo in enumerate(rotulos):
                     self.array_vertices[i].rotular_vertice(rotulo)
