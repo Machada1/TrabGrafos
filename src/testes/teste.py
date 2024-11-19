@@ -1,5 +1,6 @@
 import unittest
 from libGrafos import Grafo
+
 class TestGrafo(unittest.TestCase):
     def setUp(self):
         # Inicializa um grafo com 5 vértices para cada teste
