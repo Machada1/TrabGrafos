@@ -287,6 +287,23 @@ class Grafo:
 
         print(f"Componentes fortemente conexos: {componentes}")
         return componentes
+    
+    def e_semi_fortemente_conexo(self):
+        conexo_original = self.e_conexo()
+        if conexo_original:
+            # Invertendo o grafo
+            grafo_transposto = Grafo(self.num_vertices)
+            for u in range(self.num_vertices):
+                for v, peso in self.lista_adjacencia[u]:
+                    grafo_transposto.adicionar_aresta(v, u, peso)
+
+            conexo_transposto = grafo_transposto.e_conexo()
+            if conexo_transposto:
+                print("O grafo é semi-fortemente conexo.")
+                return True
+        print("O grafo não é semi-fortemente conexo.")
+        return False
+
 
     # Checa se há uma ponte (aresta cuja remoção desconecta o grafo)
     def e_ponte(self, u, v):
