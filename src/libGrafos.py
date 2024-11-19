@@ -180,31 +180,32 @@ class Grafo:
         
     # Checa o número de vértices
     def numero_vertices(self):
-        print(self.num_vertices)
+        print(f"Número de vértices: {self.num_vertices}")
         return self.num_vertices
 
     # Checa o número de arestas
     def numero_arestas(self):
-        print(self.num_arestas)
+        print(f"Número de arestas: {self.num_arestas}")
         return self.num_arestas
 
     # Checa se o grafo está vazio
     def grafo_vazio(self):
         if self.num_arestas > 0:
-            print('O grafo não está vazio')
-        else :
-            print('O grafo está vazio')
-        return self.num_arestas
+            print("O grafo não está vazio.")
+        else:
+            print("O grafo está vazio.")
+        return self.num_arestas == 0
 
     # Checa se o grafo é completo
     def grafo_completo(self):
-        if self.num_arestas == (self.num_vertices(self.num_vertices - 1))/2 :
-            print("O grafo está completo")
-        else :
-            print("O grafo não esta completo")
-        return self.num_arestas == (self.num_vertices(self.num_vertices - 1))/2
+        max_arestas = (self.num_vertices * (self.num_vertices - 1)) // 2
+        if self.num_arestas == max_arestas:
+            print("O grafo está completo.")
+        else:
+            print("O grafo não está completo.")
+        return self.num_arestas == max_arestas
 
-    # Checa a conectividade do grafo (simplismente conexo)
+    # Checa a conectividade do grafo (simplesmente conexo)
     def e_conexo(self):
         visitados = [False] * self.num_vertices
 
@@ -214,8 +215,10 @@ class Grafo:
                 if not visitados[vizinho]:
                     dfs(vizinho)
 
-        dfs(0)
-        return all(visitados)
+        dfs(0)  # Começa do vértice 0
+        conexo = all(visitados)
+        print(f"O grafo é {'conexo' if conexo else 'não conexo'}.")
+        return conexo
 
     # Algoritmo de Kosaraju para componentes fortemente conexos
     def kosaraju(self):
@@ -257,13 +260,15 @@ class Grafo:
                 dfs_transposto(v, componente)
                 componentes.append(componente)
 
+        print(f"Componentes fortemente conexos: {componentes}")
         return componentes
 
     # Checa se há uma ponte (aresta cuja remoção desconecta o grafo)
     def e_ponte(self, u, v):
         self.remover_aresta(u, v)
         conexo_sem_aresta = self.e_conexo()
-        self.adicionar_aresta(u, v)  # Restaurar aresta
+        self.adicionar_aresta(u, v)  # Restaurar a aresta
+        print(f"A aresta ({u}, {v}) é {'uma ponte' if not conexo_sem_aresta else 'não uma ponte'}.")
         return not conexo_sem_aresta
 
     # Checa se um vértice é um ponto de articulação (vértice cuja remoção desconecta o grafo)
@@ -278,8 +283,9 @@ class Grafo:
         for vizinho, peso in original_adjacentes:
             self.adicionar_aresta(vertice, vizinho, peso)
 
+        print(f"O vértice {vertice} é {'um ponto de articulação' if not conexo_sem_vertice else 'não um ponto de articulação'}.")
         return not conexo_sem_vertice
-
+    
     # # Função para gerar um grafo aleatório
     # def graforandom(self, num_arestas):
     #     for _ in range(num_arestas):
