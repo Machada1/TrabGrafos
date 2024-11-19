@@ -243,7 +243,7 @@ class Grafo:
         dfs(vertices[0])  # Inicia a busca DFS a partir do primeiro vértice
 
         conexo = all(visitados)  # Verifica se todos os vértices foram visitados
-        print(f"O grafo é {'conexo' if conexo else 'não conexo'}.")
+        print(f"O grafo é {'conexo' if conexo else 'não conexo!'}.")
         return conexo
 
     # Algoritmo de Kosaraju para componentes fortemente conexos
