@@ -82,3 +82,5 @@ print("\n")
 grafo.imprimir_matriz_adjacencia()
 print("\n")
 grafo.imprimir_matriz_incidencia()
+
+grafo.e_conexo()

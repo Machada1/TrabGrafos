@@ -188,12 +188,14 @@ class Grafo:
             print("Alguma das arestas fornecidas nao existe, logo elas nao sao adjacentes")
             
     # Checa se uma aresta existe entre dois vértices
-    def existe_aresta(self, u, v):
+    def existe_aresta(self, u, v, prnt=True):
         if self.matriz_adjacencia[u][v] != 0:
-            print(f"A aresta ({u},{v}) existe")
+            if prnt:
+                print(f"A aresta ({u},{v}) existe")
             return True
         else :
-            print(f"A aresta ({u},{v}) nao existe")
+            if prnt:
+                print(f"A aresta ({u},{v}) nao existe")
             return False 
         
     # Checa o número de vértices
@@ -299,15 +301,24 @@ class Grafo:
         return not conexo_sem_vertice
 
     # Função para gerar um grafo aleatório
-    def graforandom(self, num_arestas):
+    def graforandom(self, num_arestas=0):
+        if num_arestas == 0:
+            num_arestas = random.randint(1, ((self.num_vertices * (self.num_vertices - 1)) // 2))
+        if num_arestas > (self.num_vertices * (self.num_vertices - 1)) // 2:
+            print("Número de arestas excede o máximo possível para um grafo simples.")
+            return
+
         for _ in range(num_arestas):
             u = random.randint(0, self.num_vertices - 1)
             v = random.randint(0, self.num_vertices - 1)
-            # print(f"Aresta adicionada: {u} - {v}")
-            while u == v or self.existe_aresta(u, v):
+            
+            while self.existe_aresta(u,v,False):
                 u = random.randint(0, self.num_vertices - 1)
                 v = random.randint(0, self.num_vertices - 1)
-            self.adicionar_aresta(u, v,)
+            
+            self.adicionar_aresta(u, v)
+
+        print(f"Grafo aleatorio gerado com {num_arestas} arestas.")
 
 
     # Método ingenuo para detectar pontes
