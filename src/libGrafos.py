@@ -243,8 +243,9 @@ class Grafo:
         dfs(vertices[0])  # Inicia a busca DFS a partir do primeiro vértice
 
         conexo = all(visitados)  # Verifica se todos os vértices foram visitados
-        print(f"O grafo é {'conexo' if conexo else 'não conexo!'}.")
+        print(f"O grafo é {'conexo' if conexo else 'não conexo'}.")
         return conexo
+
 
     # Algoritmo de Kosaraju para componentes fortemente conexos
     def kosaraju(self):
@@ -432,38 +433,38 @@ class Grafo:
     #     return len(vetor) == len(set(vetor))
 
     # Função para verificar elementos únicos
-def elementos_unicos(vetor):
-    return len(vetor) == len(set(vetor))
+    def elementos_unicos(vetor):
+        return len(vetor) == len(set(vetor))
 
 
-# Salvar o grafo no formato GEXF
-def salvar_grafo_gexf(self, nome_arquivo):
-    with open(nome_arquivo, 'w') as f:
-        f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-        f.write('<gexf xmlns="http://www.gexf.net/1.3draft"\n')
-        f.write('     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n')
-        f.write('     xsi:schemaLocation="http://www.gexf.net/1.3draft http://www.gexf.net/1.3draft/gexf.xsd">\n')
-        f.write('  <graph mode="static" defaultedgetype="undirected">\n')
-        
-        # Adicionando nós
-        f.write('    <nodes>\n')
-        for vertice in self.array_vertices:
-            rotulo = vertice.rotulo if vertice.rotulo else vertice.indice
-            f.write(f'      <node id="{vertice.indice}" label="{rotulo}"/>\n')
-        f.write('    </nodes>\n')
+    # Salvar o grafo no formato GEXF
+    def salvar_grafo_gexf(self, nome_arquivo):
+        with open(nome_arquivo, 'w') as f:
+            f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+            f.write('<gexf xmlns="http://www.gexf.net/1.3draft"\n')
+            f.write('     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n')
+            f.write('     xsi:schemaLocation="http://www.gexf.net/1.3draft http://www.gexf.net/1.3draft/gexf.xsd">\n')
+            f.write('  <graph mode="static" defaultedgetype="undirected">\n')
+            
+            # Adicionando nós
+            f.write('    <nodes>\n')
+            for vertice in self.array_vertices:
+                rotulo = vertice.rotulo if vertice.rotulo else vertice.indice
+                f.write(f'      <node id="{vertice.indice}" label="{rotulo}"/>\n')
+            f.write('    </nodes>\n')
 
-        # Adicionando arestas
-        f.write('    <edges>\n')
-        edge_id = 0
-        for aresta in self.array_arestas:
-            u, v = aresta.Vsaida, aresta.Vchegada
-            peso = aresta.peso if aresta.peso is not None else 1
-            if u < v: 
-                f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" weight="{peso}"/>\n')
-                edge_id += 1
-        f.write('    </edges>\n')
-        f.write('  </graph>\n')
-        f.write('</gexf>\n')
+            # Adicionando arestas
+            f.write('    <edges>\n')
+            edge_id = 0
+            for aresta in self.array_arestas:
+                u, v = aresta.Vsaida, aresta.Vchegada
+                peso = aresta.peso if aresta.peso is not None else 1
+                if u < v: 
+                    f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" weight="{peso}"/>\n')
+                    edge_id += 1
+            f.write('    </edges>\n')
+            f.write('  </graph>\n')
+            f.write('</gexf>\n')
 
     # Imprime os arestas do grafo com seus rotulos e pesos
     def imprimir_arestas(self):
