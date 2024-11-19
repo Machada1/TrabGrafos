@@ -32,7 +32,7 @@ grafo.imprimir_vertices()
 # Teste de manipulação
 # grafo.remover_aresta(0,1)
 
-# Impreção novamente
+# Impressão novamente
 # grafo.imprimir_matriz_aresta()
 # grafo.imprimir_matriz_adjacencia()
 # grafo.imprimir_matriz_incidencia()
