@@ -67,10 +67,12 @@ class Grafo:
     # Adiciona uma aresta entre os vértices u e v
     def adicionar_aresta(self, V1, V2, rotulo=None, peso=1):
         for aresta in self.array_arestas:
+            U = self.array_vertices[self.achar_vertice(V1)]
+            V = self.array_vertices[self.achar_vertice(V2)]
             u = aresta.V1
             v = aresta.V2
             indices = [(u.indice,v.indice),(v.indice,u.indice)]
-            if (V1,V2) in indices:
+            if (U.indice,V.indice) in indices:
                 print(f'A aresta {V1,V2} ja existe')
                 return
         if self.achar_vertice(V1) != -1 and self.achar_vertice(V2) != -1:
@@ -84,8 +86,8 @@ class Grafo:
             self.array_arestas.append(aresta)
 
             # Matriz de Adjacencia
-            self.matriz_adjacencia[u.indice][v.indice] = 1
-            self.matriz_adjacencia[v.indice][u.indice] = 1
+            self.matriz_adjacencia[u.indice][v.indice] = peso
+            self.matriz_adjacencia[v.indice][u.indice] = peso
 
             # Lista de Adjacencia
             for vertice in self.array_vertices:
@@ -154,6 +156,10 @@ class Grafo:
         if len(pesos) == len(self.array_arestas):
             for i,peso in enumerate(pesos):
                 self.array_arestas[i].ponderar_aresta(peso)
+                u = self.array_arestas[i].V1
+                v = self.array_arestas[i].V2
+                self.matriz_adjacencia[u.indice][v.indice] = peso
+                self.matriz_adjacencia[v.indice][u.indice] = peso
         else:
             print(f'A quantidade de pesos fornecida nao condiz com a quantidade de arestas do grafo.')
 
