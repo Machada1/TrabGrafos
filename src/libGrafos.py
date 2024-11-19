@@ -225,7 +225,7 @@ class Grafo:
         return self.num_arestas == (self.num_vertices*(self.num_vertices - 1))/2
 
     # Checa a conectividade do grafo (simplesmente conexo)
-    def e_conexo(self):
+    def e_conexo(self, vertices):
         visitados = [False] * self.num_vertices
 
         def dfs(v):
@@ -234,8 +234,15 @@ class Grafo:
                 if not visitados[vizinho]:
                     dfs(vizinho)
 
-        dfs(0)  # Começa do vértice 0
-        conexo = all(visitados)
+        # Verifica se o conjunto de vértices está vazio
+        if not vertices:
+            print("O conjunto de vértices está vazio. Não é possível verificar conectividade.")
+            return False
+
+        # Começa a busca a partir do primeiro vértice na lista de 'vertices'
+        dfs(vertices[0])  # Inicia a busca DFS a partir do primeiro vértice
+
+        conexo = all(visitados)  # Verifica se todos os vértices foram visitados
         print(f"O grafo é {'conexo' if conexo else 'não conexo'}.")
         return conexo
 
