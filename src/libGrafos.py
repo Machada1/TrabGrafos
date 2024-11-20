@@ -232,18 +232,20 @@ class Grafo:
 
     # Checa a conectividade do grafo (simplesmente conexo)
     def e_conexo(self):
-        visitados = [False] * self.num_vertices
+        visitados = {vertice: False for vertice in self.array_vertices}
 
-        def dfs(v):
-            visitados[v] = True
-            for vizinho, _ in self.lista_adjacencia[v]:
+        def dfs(vertice):
+            visitados[vertice] = True
+            for vizinho in self.lista_adjacencia[vertice]:
                 if not visitados[vizinho]:
                     dfs(vizinho)
 
-        dfs(0)  # Começa do vértice 0
-        conexo = all(visitados)
+        # Começa do primeiro vértice
+        dfs(self.array_vertices[0])
+        conexo = all(visitados.values())
         print(f"O grafo é {'conexo' if conexo else 'não conexo'}.")
         return conexo
+
 
     # Algoritmo de Kosaraju para componentes fortemente conexos
     def kosaraju(self):
@@ -349,17 +351,17 @@ class Grafo:
         print(f"Grafo aleatorio gerado com {num_arestas} arestas.")
 
 
-    # Método ingenuo para detectar pontes
     def detectar_ponte_naive(self):
         pontes = []
-        for u in range(self.num_vertices):
-            for v in range(u + 1, self.num_vertices):
-                if self.existe_aresta(u, v):
-                    self.remover_aresta(u, v)
-                    if not self.e_conexo():
-                        pontes.append((u, v))
-                    self.adicionar_aresta(u, v)  # Restaurar aresta
+        for aresta in self.array_arestas[:]:  # Itera sobre as arestas do grafo
+            u = aresta.V1
+            v = aresta.V2
+            self.remover_aresta(aresta)  # Remove a aresta atual
+            if not self.e_conexo():  # Verifica a conectividade
+                pontes.append((u.indice, v.indice))
+            self.adicionar_aresta(u.indice, v.indice, aresta.rotulo, aresta.peso)  # Restaura a aresta
         return pontes
+
     
         
     def tarjan_ponte_util(self, u, visitados, disc, low, parent, pontes):
@@ -367,8 +369,9 @@ class Grafo:
         disc[u] = low[u] = self.time
         self.time += 1
 
-        for v, peso in self.lista_adjacencia[u]:
-            if not visitados[v]:  # v nao visitado
+        # Acessando a lista de adjacência corretamente usando o índice de 'u'
+        for v in self.lista_adjacencia[self.array_vertices[u].indice]:  # Acesse corretamente o índice do vértice
+            if not visitados[v]:  # v não visitado
                 parent[v] = u
                 self.tarjan_ponte_util(v, visitados, disc, low, parent, pontes)
 
@@ -381,6 +384,8 @@ class Grafo:
 
             elif v != parent[u]:  # Atualiza low[u] para o caso de um ciclo
                 low[u] = min(low[u], disc[v])
+
+
 
     def detectar_ponte_tarjan(self):
         visitados = [False] * self.num_vertices
@@ -472,7 +477,7 @@ class Grafo:
             f.write('    <edges>\n')
             edge_id = 0
             for aresta in self.array_arestas:
-                u, v = aresta.Vsaida, aresta.Vchegada
+                u, v = aresta.V1.indice, aresta.V2.indice 
                 peso = aresta.peso if aresta.peso is not None else 1
                 if u < v: 
                     f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" weight="{peso}"/>\n')
@@ -480,6 +485,7 @@ class Grafo:
             f.write('    </edges>\n')
             f.write('  </graph>\n')
             f.write('</gexf>\n')
+
 
     # Imprime os arestas do grafo com seus rotulos e pesos
     def imprimir_arestas(self):
