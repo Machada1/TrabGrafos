@@ -231,8 +231,13 @@ class Grafo:
         return self.num_arestas == (self.num_vertices*(self.num_vertices - 1))/2
 
     # Checa a conectividade do grafo (simplesmente conexo)
+<<<<<<< HEAD
     def e_conexo(self):
         visitados = {vertice: False for vertice in self.array_vertices}
+=======
+    def e_conexo(self, vertices):
+        visitados = [False] * self.num_vertices
+>>>>>>> 8b48754620e429bb7f3ebdb8b37f7e6df7348dd5
 
         def dfs(vertice):
             visitados[vertice] = True
@@ -240,9 +245,21 @@ class Grafo:
                 if not visitados[vizinho]:
                     dfs(vizinho)
 
+<<<<<<< HEAD
         # Começa do primeiro vértice
         dfs(self.array_vertices[0])
         conexo = all(visitados.values())
+=======
+        # Verifica se o conjunto de vértices está vazio
+        if not vertices:
+            print("O conjunto de vértices está vazio. Não é possível verificar conectividade.")
+            return False
+
+        # Começa a busca a partir do primeiro vértice na lista de 'vertices'
+        dfs(vertices[0])  # Inicia a busca DFS a partir do primeiro vértice
+
+        conexo = all(visitados)  # Verifica se todos os vértices foram visitados
+>>>>>>> 8b48754620e429bb7f3ebdb8b37f7e6df7348dd5
         print(f"O grafo é {'conexo' if conexo else 'não conexo'}.")
         return conexo
 
@@ -472,6 +489,7 @@ class Grafo:
                 rotulo = vertice.rotulo if vertice.rotulo else vertice.indice
                 f.write(f'      <node id="{vertice.indice}" label="{rotulo}"/>\n')
             f.write('    </nodes>\n')
+<<<<<<< HEAD
 
             # Adicionando arestas
             f.write('    <edges>\n')
@@ -486,6 +504,21 @@ class Grafo:
             f.write('  </graph>\n')
             f.write('</gexf>\n')
 
+=======
+
+            # Adicionando arestas
+            f.write('    <edges>\n')
+            edge_id = 0
+            for aresta in self.array_arestas:
+                u, v = aresta.Vsaida, aresta.Vchegada
+                peso = aresta.peso if aresta.peso is not None else 1
+                if u < v: 
+                    f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" weight="{peso}"/>\n')
+                    edge_id += 1
+            f.write('    </edges>\n')
+            f.write('  </graph>\n')
+            f.write('</gexf>\n')
+>>>>>>> 8b48754620e429bb7f3ebdb8b37f7e6df7348dd5
 
     # Imprime os arestas do grafo com seus rotulos e pesos
     def imprimir_arestas(self):
