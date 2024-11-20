@@ -5,6 +5,7 @@ class Vertice:
         self.indice = indice
         self.rotulo = rotulo
         self.peso = peso
+        self.fecho = []
     
     def rotular_vertice(self, rotulo):
         self.rotulo = rotulo 
@@ -80,6 +81,21 @@ class Grafo:
             u=self.array_vertices[self.achar_vertice(V1)]
             v=self.array_vertices[self.achar_vertice(V2)]
 
+            if v not in u.fecho:
+                u.fecho.append(v)
+            if u not in v.fecho:
+                v.fecho.append(u)
+            for vertice in v.fecho:
+                if vertice not in u.fecho:
+                    u.fecho.append(vertice)
+                if u not in vertice.fecho:
+                    vertice.fecho.append(u)
+            for vertice in u.fecho:
+                if vertice not in v.fecho:
+                    v.fecho.append(vertice)
+                if v not in vertice.fecho:
+                    vertice.fecho.append(v)
+
             aresta = Aresta(u,v,rotulo,peso)
 
             # Array de arestas
@@ -117,6 +133,8 @@ class Grafo:
             A = self.array_arestas[self.achar_aresta(aresta)]
             u = A.V1
             v = A.V2
+
+            self.atualizar_fechos()
 
             # Matriz de Adjacencia
             self.matriz_adjacencia[A.V1.indice][A.V2.indice] = 0
@@ -232,18 +250,13 @@ class Grafo:
 
     # Checa a conectividade do grafo (simplesmente conexo)
     def e_conexo(self):
-        visitados = [False] * self.num_vertices
-
-        def dfs(v):
-            visitados[v] = True
-            for vizinho, _ in self.lista_adjacencia[v]:
-                if not visitados[vizinho]:
-                    dfs(vizinho)
-
-        dfs(0)  # Começa do vértice 0
-        conexo = all(visitados)
-        print(f"O grafo é {'conexo' if conexo else 'não conexo'}.")
-        return conexo
+        visitados = [0] * self.numero_vertices()
+        for vertice in self.array_vertices:
+            for V in vertice.fecho:
+                visitados[V.indice] = 1
+        if len(set(visitados)) == 1:
+            print("O grafo e conexo")
+            return True
 
     # Algoritmo de Kosaraju para componentes fortemente conexos
     def kosaraju(self):
@@ -525,6 +538,12 @@ class Grafo:
                 else:
                     vertices = [chave.indice]
                 print(f'{chave.indice}: {vertices}')
+
+    def imprimir_fechos(self):
+        for vertice in self.array_vertices:
+            print(f"Fecho do vertice {vertice.indice}")
+            for V in vertice.fecho:
+                V.imprimir_vertice()
 
     def elementos_unicos(self,vetor):
         return len(vetor) == len(set(vetor))
