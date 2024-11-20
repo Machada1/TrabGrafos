@@ -2,23 +2,18 @@ import os
 from libGrafos import Grafo
 
 def testar_grafo_gexf():
-    grafo = Grafo(5)
-    
-    grafo.rotular_vertices(["A", "B", "C", "D","E"])
+    grafo = Grafo(3)
+
+    grafo.rotular_vertices(["A", "B", "C"])
     
     grafo.adicionar_aresta(0, 1)
     grafo.adicionar_aresta(0, 2)
-    grafo.adicionar_aresta(0, 3)
-    grafo.adicionar_aresta(0, 4)
     grafo.adicionar_aresta(1, 2)
-    grafo.adicionar_aresta(1, 3)
-    grafo.adicionar_aresta(1, 4)
-    grafo.adicionar_aresta(2, 3)
-    grafo.adicionar_aresta(2, 4)
+
  
 
   
-    nome_arquivo = "grafoGexf.gexf"
+    nome_arquivo = "grafoGexf3.gexf"
     
     grafo.salvar_grafo_gexf(nome_arquivo)
     
