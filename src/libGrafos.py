@@ -321,16 +321,17 @@ class Grafo:
         return not conexo_sem_aresta  # Retorna o estado correto da ponte
 
     # Checa se um vértice é um ponto de articulação (vértice cuja remoção desconecta o grafo)
-    def e_articulacao(self, vertice):
+    def e_articulacao(self, v):
+        vertice = self.array_vertices[self.achar_vertice(v)]
         original_adjacentes = self.lista_adjacencia[vertice][:]
-        for vizinho, peso in original_adjacentes:
-            self.remover_aresta(vertice, vizinho)
+        for item in original_adjacentes:
+            self.remover_aresta((vertice.indice,item.indice))
 
         conexo_sem_vertice = self.e_conexo()
 
         # Restaurar as arestas removidas
-        for vizinho, peso in original_adjacentes:
-            self.adicionar_aresta(vertice, vizinho, peso)
+        for item in original_adjacentes:
+            self.adicionar_aresta(vertice.indice, item.indice, item.peso)
 
         print(f"O vértice {vertice} é {'um ponto de articulação' if not conexo_sem_vertice else 'não um ponto de articulação'}.")
         return not conexo_sem_vertice
