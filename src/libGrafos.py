@@ -112,7 +112,6 @@ class Grafo:
 
     # Remove uma aresta entre os vértices u e v
     def remover_aresta(self, aresta):
-
         if self.achar_aresta(aresta) != -1:
             A = self.array_arestas[self.achar_aresta(aresta)]
             u = A.V1
@@ -123,8 +122,8 @@ class Grafo:
             self.matriz_adjacencia[A.V2.indice][A.V1.indice] = 0
 
             # Lista de Adjacencia
-            self.lista_adjacencia[u] = self.lista_adjacencia[u].remove(v)
-            self.lista_adjacencia[v] = self.lista_adjacencia[v].remove(u)
+            self.lista_adjacencia[u].remove(v) 
+            self.lista_adjacencia[v].remove(u)  
             
             # Matriz de Incidencia
             for aresta in self.matriz_incidencia:
@@ -135,7 +134,7 @@ class Grafo:
             # Array de arestas
             self.array_arestas.remove(A)
 
-            self.num_arestas = self.num_arestas - 1
+            self.num_arestas -= 1
 
         else:
             print('A aresta selecionada nao existe')
@@ -232,18 +231,20 @@ class Grafo:
 
     # Checa a conectividade do grafo (simplesmente conexo)
     def e_conexo(self):
-        visitados = [False] * self.num_vertices
+        visitados = {vertice: False for vertice in self.array_vertices}
 
-        def dfs(v):
-            visitados[v] = True
-            for vizinho, _ in self.lista_adjacencia[v]:
+        def dfs(vertice):
+            visitados[vertice] = True
+            for vizinho in self.lista_adjacencia[vertice]:
                 if not visitados[vizinho]:
                     dfs(vizinho)
 
-        dfs(0)  # Começa do vértice 0
-        conexo = all(visitados)
+        # Começa do primeiro vértice
+        dfs(self.array_vertices[0])
+        conexo = all(visitados.values())
         print(f"O grafo é {'conexo' if conexo else 'não conexo'}.")
         return conexo
+
 
     # Algoritmo de Kosaraju para componentes fortemente conexos
     def kosaraju(self):
@@ -307,11 +308,17 @@ class Grafo:
 
     # Checa se há uma ponte (aresta cuja remoção desconecta o grafo)
     def e_ponte(self, u, v):
-        self.remover_aresta(u, v)
-        conexo_sem_aresta = self.e_conexo()
-        self.adicionar_aresta(u, v)  # Restaurar a aresta
-        print(f"A aresta ({u}, {v}) é {'uma ponte' if not conexo_sem_aresta else 'não uma ponte'}.")
-        return not conexo_sem_aresta
+        aresta = (u, v)
+        self.remover_aresta(aresta) 
+        conexo_sem_aresta = self.e_conexo()  
+        self.adicionar_aresta(u, v)  # Restaura a aresta
+
+        if not conexo_sem_aresta:
+            print(f"A aresta ({u}, {v}) é uma ponte.")
+        else:
+            print(f"A aresta ({u}, {v}) não é uma ponte.")
+
+        return not conexo_sem_aresta  # Retorna o estado correto da ponte
 
     # Checa se um vértice é um ponto de articulação (vértice cuja remoção desconecta o grafo)
     def e_articulacao(self, vertice):
@@ -349,17 +356,17 @@ class Grafo:
         print(f"Grafo aleatorio gerado com {num_arestas} arestas.")
 
 
-    # Método ingenuo para detectar pontes
     def detectar_ponte_naive(self):
         pontes = []
-        for u in range(self.num_vertices):
-            for v in range(u + 1, self.num_vertices):
-                if self.existe_aresta(u, v):
-                    self.remover_aresta(u, v)
-                    if not self.e_conexo():
-                        pontes.append((u, v))
-                    self.adicionar_aresta(u, v)  # Restaurar aresta
+        for aresta in self.array_arestas[:]:  # Itera sobre as arestas do grafo
+            u = aresta.V1
+            v = aresta.V2
+            self.remover_aresta(aresta)  # Remove a aresta atual
+            if not self.e_conexo():  # Verifica a conectividade
+                pontes.append((u.indice, v.indice))
+            self.adicionar_aresta(u.indice, v.indice, aresta.rotulo, aresta.peso)  # Restaura a aresta
         return pontes
+
     
         
     def tarjan_ponte_util(self, u, visitados, disc, low, parent, pontes):
@@ -367,8 +374,9 @@ class Grafo:
         disc[u] = low[u] = self.time
         self.time += 1
 
-        for v, peso in self.lista_adjacencia[u]:
-            if not visitados[v]:  # v nao visitado
+        # Acessando a lista de adjacência corretamente usando o índice de 'u'
+        for v in self.lista_adjacencia[self.array_vertices[u].indice]:  # Acesse corretamente o índice do vértice
+            if not visitados[v]:  # v não visitado
                 parent[v] = u
                 self.tarjan_ponte_util(v, visitados, disc, low, parent, pontes)
 
@@ -381,6 +389,8 @@ class Grafo:
 
             elif v != parent[u]:  # Atualiza low[u] para o caso de um ciclo
                 low[u] = min(low[u], disc[v])
+
+
 
     def detectar_ponte_tarjan(self):
         visitados = [False] * self.num_vertices
@@ -472,7 +482,7 @@ class Grafo:
             f.write('    <edges>\n')
             edge_id = 0
             for aresta in self.array_arestas:
-                u, v = aresta.Vsaida, aresta.Vchegada
+                u, v = aresta.V1.indice, aresta.V2.indice 
                 peso = aresta.peso if aresta.peso is not None else 1
                 if u < v: 
                     f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" weight="{peso}"/>\n')
@@ -480,6 +490,7 @@ class Grafo:
             f.write('    </edges>\n')
             f.write('  </graph>\n')
             f.write('</gexf>\n')
+
 
     # Imprime os arestas do grafo com seus rotulos e pesos
     def imprimir_arestas(self):
@@ -531,16 +542,16 @@ class Grafo:
         if self.vertices_rotulados():
             for chave,valor in self.lista_adjacencia.items():
                 if valor:
-                    vertices = [chave.rotulo]+[vertice.rotulo for vertice in valor]
+                    vertices =[vertice.rotulo for vertice in valor]
                 else:
-                    vertices = [chave.rotulo]
+                    vertices = []
                 print(f'{chave.rotulo}: {vertices}')
         else:
             for chave,valor in self.lista_adjacencia.items():
                 if valor:
-                    vertices = [chave.indice]+[vertice.indice for vertice in valor]
+                    vertices = [vertice.indice for vertice in valor]
                 else:
-                    vertices = [chave.indice]
+                    vertices = []
                 print(f'{chave.indice}: {vertices}')
 
     def elementos_unicos(self,vetor):
@@ -572,3 +583,132 @@ class Grafo:
             if not aresta.rotulo:
                 return False
         return True
+
+class Aresta_Direcionada:
+    def __init__(self, u, v, rotulo, peso):
+        self.indice = (u,v)
+        self.V1 = u
+        self.V2 = v
+        self.rotulo = rotulo
+        self.peso = peso
+
+    def rotular_aresta(self, rotulo):
+        self.rotulo = rotulo
+
+    def ponderar_aresta(self, peso):
+        self.peso = peso
+    
+    def imprimir_aresta(self):
+        print(f'Aresta: {self.V1.indice,self.V2.indice}, Rotulo: {self.rotulo}, Peso: {self.peso}')
+
+class Direcionado(Grafo):
+
+    # Adiciona uma aresta entre os vértices u e v
+    def adicionar_aresta(self, V1, V2, rotulo=None, peso=1):
+        for aresta in self.array_arestas:
+            U = self.array_vertices[self.achar_vertice(V1)]
+            V = self.array_vertices[self.achar_vertice(V2)]
+            u = aresta.V1
+            v = aresta.V2
+            if (U.indice, V.indice) == (u.indice, v.indice):
+                print(f'A aresta {V1,V2} ja existe')
+                return
+        if self.achar_vertice(V1) != -1 and self.achar_vertice(V2) != -1:
+            
+            u=self.array_vertices[self.achar_vertice(V1)]
+            v=self.array_vertices[self.achar_vertice(V2)]
+
+            aresta = Aresta_Direcionada(u,v,rotulo,peso)
+
+            # Array de arestas
+            self.array_arestas.append(aresta)
+
+            # Matriz de Adjacencia
+            self.matriz_adjacencia[u.indice][v.indice] = peso
+
+            # Lista de Adjacencia
+            for vertice in self.array_vertices:
+                if vertice == u:
+                    self.lista_adjacencia[vertice].append(v)
+
+            # Matriz de Incidencia (implementação simples)
+            newAresta = []
+            for i in range(self.num_vertices):
+                if i == u.indice:
+                    newAresta.append(1)
+                elif i == v.indice:
+                    newAresta.append(-1)
+                else:
+                    newAresta.append(0)
+            self.matriz_incidencia.append(newAresta)
+
+            self.num_arestas = self.num_arestas + 1
+            
+        else :
+            print('Um dos vertices selecionados nao existe')
+
+        
+    def remover_aresta(self, aresta):
+
+        if self.achar_aresta(aresta) != -1:
+            A = self.array_arestas[self.achar_aresta(aresta)]
+            u = A.V1
+            v = A.V2
+
+            # Matriz de Adjacencia
+            self.matriz_adjacencia[u.indice][v.indice] = 0
+
+            # Lista de Adjacencia
+            self.lista_adjacencia[u] = self.lista_adjacencia[u].remove(v)
+            
+            # Matriz de Incidencia
+            for aresta in self.matriz_incidencia:
+                if aresta[u.indice] != 0 and aresta[v.indice] != 0:
+                    self.matriz_incidencia.remove(aresta)
+                    break
+
+            # Array de arestas
+            self.array_arestas.remove(A)
+
+            self.num_arestas = self.num_arestas - 1
+
+        else:
+            print('A aresta selecionada nao existe')
+
+    # Salvar o grafo no formato GEXF
+    def salvar_grafo_gexf(self, nome_arquivo):
+        with open(nome_arquivo, 'w') as f:
+            f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+            f.write('<gexf xmlns="http://www.gexf.net/1.3draft"\n')
+            f.write('     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n')
+            f.write('     xsi:schemaLocation="http://www.gexf.net/1.3draft http://www.gexf.net/1.3draft/gexf.xsd">\n')
+            f.write('  <graph mode="static" defaultedgetype="directed">\n')
+            
+            # Adicionando nós
+            f.write('    <nodes>\n')
+            for vertice in self.array_vertices:
+                rotulo = vertice.rotulo if vertice.rotulo else vertice.indice
+                f.write(f'      <node id="{vertice.indice}" label="{rotulo}"/>\n')
+            f.write('    </nodes>\n')
+
+            # Adicionando arestas
+            f.write('    <edges>\n')
+            edge_id = 0
+            for aresta in self.array_arestas:
+                u, v = aresta.Vsaida, aresta.Vchegada
+                peso = aresta.peso if aresta.peso is not None else 1
+                if u < v: 
+                    f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" weight="{peso}"/>\n')
+                    edge_id += 1
+            f.write('    </edges>\n')
+            f.write('  </graph>\n')
+            f.write('</gexf>\n')
+
+    def achar_aresta(self, valor):
+        for i, aresta in enumerate(self.array_arestas):
+            u = aresta.V1.indice
+            v = aresta.V2.indice
+            indices = [(u,v)]
+            if valor in indices or valor == aresta.rotulo:
+                return i
+        return -1
