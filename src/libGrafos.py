@@ -112,7 +112,6 @@ class Grafo:
 
     # Remove uma aresta entre os vértices u e v
     def remover_aresta(self, aresta):
-
         if self.achar_aresta(aresta) != -1:
             A = self.array_arestas[self.achar_aresta(aresta)]
             u = A.V1
@@ -123,8 +122,8 @@ class Grafo:
             self.matriz_adjacencia[A.V2.indice][A.V1.indice] = 0
 
             # Lista de Adjacencia
-            self.lista_adjacencia[u] = self.lista_adjacencia[u].remove(v)
-            self.lista_adjacencia[v] = self.lista_adjacencia[v].remove(u)
+            self.lista_adjacencia[u].remove(v) 
+            self.lista_adjacencia[v].remove(u)  
             
             # Matriz de Incidencia
             for aresta in self.matriz_incidencia:
@@ -135,7 +134,7 @@ class Grafo:
             # Array de arestas
             self.array_arestas.remove(A)
 
-            self.num_arestas = self.num_arestas - 1
+            self.num_arestas -= 1
 
         else:
             print('A aresta selecionada nao existe')
@@ -309,11 +308,17 @@ class Grafo:
 
     # Checa se há uma ponte (aresta cuja remoção desconecta o grafo)
     def e_ponte(self, u, v):
-        self.remover_aresta(u, v)
-        conexo_sem_aresta = self.e_conexo()
-        self.adicionar_aresta(u, v)  # Restaurar a aresta
-        print(f"A aresta ({u}, {v}) é {'uma ponte' if not conexo_sem_aresta else 'não uma ponte'}.")
-        return not conexo_sem_aresta
+        aresta = (u, v)
+        self.remover_aresta(aresta) 
+        conexo_sem_aresta = self.e_conexo()  
+        self.adicionar_aresta(u, v)  # Restaura a aresta
+
+        if not conexo_sem_aresta:
+            print(f"A aresta ({u}, {v}) é uma ponte.")
+        else:
+            print(f"A aresta ({u}, {v}) não é uma ponte.")
+
+        return not conexo_sem_aresta  # Retorna o estado correto da ponte
 
     # Checa se um vértice é um ponto de articulação (vértice cuja remoção desconecta o grafo)
     def e_articulacao(self, vertice):
