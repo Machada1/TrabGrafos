@@ -333,7 +333,7 @@ class Grafo:
         for item in original_adjacentes:
             self.adicionar_aresta(vertice.indice, item.indice, item.peso)
 
-        print(f"O vértice {vertice} é {'um ponto de articulação' if not conexo_sem_vertice else 'não um ponto de articulação'}.")
+        print(f"O vértice {v} é {'um ponto de articulação' if not conexo_sem_vertice else 'não um ponto de articulação'}.")
         return not conexo_sem_vertice
 
     # Função para gerar um grafo aleatório
