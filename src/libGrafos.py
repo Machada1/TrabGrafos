@@ -431,32 +431,6 @@ class Grafo:
 
         dfs(0)  # Começa do vértice 0
         return caminho
-
-    # def salvar_grafo_gexf(self, nome_arquivo):
-    #     with open(nome_arquivo, 'w') as f:
-    #         f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-    #         f.write('<gexf xmlns="http://www.gexf.net/1.3draft"\n')
-    #         f.write('     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n')
-    #         f.write('     xsi:schemaLocation="http://www.gexf.net/1.3draft http://www.gexf.net/1.3draft/gexf.xsd">\n')
-    #         f.write('  <graph mode="static" defaultedgetype="undirected">\n')
-    #         f.write('    <nodes>\n')
-    #         for i in range(self.num_vertices):
-    #             f.write(f'      <node id="{i}" label="{i}"/>\n')
-    #         f.write('    </nodes>\n')
-    #         f.write('    <edges>\n')
-    #         edge_id = 0
-    #         for u in range(self.num_vertices):
-    #             for v, peso in self.lista_adjacencia[u]:
-    #                 if u < v:  # Para não duplicar arestas
-    #                     f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" weight="{peso}"/>\n')
-    #                     edge_id += 1
-    #         f.write('    </edges>\n')
-    #         f.write('  </graph>\n')
-    #         f.write('</gexf>\n')
-
-    # def elementos_unicos(self,vetor):
-    #     return len(vetor) == len(set(vetor))
-
     # Função para verificar elementos únicos
     def elementos_unicos(vetor):
         return len(vetor) == len(set(vetor))
