@@ -1,4 +1,5 @@
 import random
+import copy
 
 class Vertice:
     def __init__(self, indice, rotulo=None, peso=None):
@@ -138,6 +139,14 @@ class Grafo:
 
         else:
             print('A aresta selecionada nao existe')
+
+    def remover_vertice(self,v):
+        vertice = self.array_vertices[self.achar_vertice(v)]
+        original_adjacentes = self.lista_adjacencia[vertice]
+        for item in original_adjacentes:
+            self.remover_aresta((vertice.indice,item.indice))
+        self.array_vertices.remove(vertice)
+        self.num_vertices = self.num_vertices - 1
 
     # Rotula as arestas do grafo
     def rotular_arestas(self,rotulos):
@@ -323,18 +332,14 @@ class Grafo:
     # Checa se um vértice é um ponto de articulação (vértice cuja remoção desconecta o grafo)
     def e_articulacao(self, v):
         vertice = self.array_vertices[self.achar_vertice(v)]
-        original_adjacentes = self.lista_adjacencia[vertice][:]
-        for item in original_adjacentes:
-            self.remover_aresta((vertice.indice,item.indice))
-
-        conexo_sem_vertice = self.e_conexo()
-
-        # Restaurar as arestas removidas
-        for item in original_adjacentes:
-            self.adicionar_aresta(vertice.indice, item.indice, item.peso)
-
-        print(f"O vértice {v} é {'um ponto de articulação' if not conexo_sem_vertice else 'não um ponto de articulação'}.")
-        return not conexo_sem_vertice
+        grafo_aux = copy.deepcopy(self)
+        grafo_aux.remover_vertice(vertice)
+        articulaçao = grafo_aux.e_conexo()
+        if articulaçao:
+            print("O vertice {v} e articulação")
+        else:
+            print("O vertice {v} nao e articulação")
+        return articulaçao
 
     # Função para gerar um grafo aleatório
     def graforandom(self, num_arestas=0):
