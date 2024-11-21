@@ -335,6 +335,7 @@ class Grafo:
         grafo_aux = copy.deepcopy(self)
         grafo_aux.remover_vertice(vertice)
         articulaçao = grafo_aux.e_conexo()
+        print(articulaçao)
         if articulaçao:
             print("O vertice {v} e articulação")
         else:
