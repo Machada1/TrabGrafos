@@ -5,7 +5,6 @@ class Vertice:
         self.indice = indice
         self.rotulo = rotulo
         self.peso = peso
-        self.fecho = []
     
     def rotular_vertice(self, rotulo):
         self.rotulo = rotulo 
@@ -81,21 +80,6 @@ class Grafo:
             u=self.array_vertices[self.achar_vertice(V1)]
             v=self.array_vertices[self.achar_vertice(V2)]
 
-            if v not in u.fecho:
-                u.fecho.append(v)
-            if u not in v.fecho:
-                v.fecho.append(u)
-            for vertice in v.fecho:
-                if vertice not in u.fecho:
-                    u.fecho.append(vertice)
-                if u not in vertice.fecho:
-                    vertice.fecho.append(u)
-            for vertice in u.fecho:
-                if vertice not in v.fecho:
-                    v.fecho.append(vertice)
-                if v not in vertice.fecho:
-                    vertice.fecho.append(v)
-
             aresta = Aresta(u,v,rotulo,peso)
 
             # Array de arestas
@@ -133,8 +117,6 @@ class Grafo:
             A = self.array_arestas[self.achar_aresta(aresta)]
             u = A.V1
             v = A.V2
-
-            self.atualizar_fechos()
 
             # Matriz de Adjacencia
             self.matriz_adjacencia[A.V1.indice][A.V2.indice] = 0
@@ -539,12 +521,6 @@ class Grafo:
                     vertices = []
                 print(f'{chave.indice}: {vertices}')
 
-    def imprimir_fechos(self):
-        for vertice in self.array_vertices:
-            print(f"Fecho do vertice {vertice.indice}")
-            for V in vertice.fecho:
-                V.imprimir_vertice()
-
     def elementos_unicos(self,vetor):
         return len(vetor) == len(set(vetor))
     
@@ -608,21 +584,6 @@ class Direcionado(Grafo):
             
             u=self.array_vertices[self.achar_vertice(V1)]
             v=self.array_vertices[self.achar_vertice(V2)]
-
-            if v not in u.fecho:
-                u.fecho.append(v)
-            if u not in v.fecho:
-                v.fecho.append(u)
-            for vertice in v.fecho:
-                if vertice not in u.fecho:
-                    u.fecho.append(vertice)
-                if u not in vertice.fecho:
-                    vertice.fecho.append(u)
-            for vertice in u.fecho:
-                if vertice not in v.fecho:
-                    v.fecho.append(vertice)
-                if v not in vertice.fecho:
-                    vertice.fecho.append(v)
 
             aresta = Aresta_Direcionada(u,v,rotulo,peso)
 
