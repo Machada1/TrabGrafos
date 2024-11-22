@@ -241,23 +241,13 @@ class Grafo:
         return self.num_arestas == (self.num_vertices*(self.num_vertices - 1))/2
 
     # Checa a conectividade do grafo (simplesmente conexo)
-    def e_conexo(self, prnt = True):
-        visitados = {vertice: False for vertice in self.array_vertices}
-
-        def dfs(vertice):
-            visitados[vertice] = True
-            for vizinho in self.lista_adjacencia[vertice]:
-                if not visitados[vizinho]:
-                    dfs(vizinho)
-
-        # Começa do primeiro vertice
-        dfs(self.array_vertices[0])
-        conexo = all(visitados.values())
-        if prnt:
-            print(f"O grafo e {'conexo' if conexo else 'nao conexo'}.")
+    def e_conexo(self):
+        # Usa o novo DFS iterativo para verificar a conectividade
+        visitados = self.dfs_iterativo(0)  # Começa do vértice 0
+        conexo = len(visitados) == self.num_vertices  # Verifica se todos os vértices foram visitados
+        print(f"O grafo é {'conexo' if conexo else 'não conexo'}.")
         return conexo
-
-
+    
     # Algoritmo de Kosaraju para componentes fortemente conexos
     def kosaraju(self):
         # Passo 1: DFS normal
@@ -717,3 +707,23 @@ class Direcionado(Grafo):
             if valor in indices or valor == aresta.rotulo:
                 return i
         return -1
+    
+    def dfs_iterativo(self, u: int) -> list:
+        # Inicializa a lista de vértices visitados e a pilha
+        visitados = [False] * self.num_vertices
+        stack = [u]  # Adiciona o vértice inicial na pilha
+        ordem_visita = []  # Armazena a ordem de visita dos vértices
+
+        while stack:
+            vertice_atual = stack.pop()
+            if not visitados[vertice_atual]:
+                visitados[vertice_atual] = True
+                ordem_visita.append(vertice_atual)
+
+                # Adiciona os vizinhos do vértice na pilha
+                for vizinho in reversed(self.lista_adjacencia[self.array_vertices[vertice_atual]]):
+                    if not visitados[vizinho.indice]:
+                        stack.append(vizinho.indice)
+
+        return ordem_visita
+
