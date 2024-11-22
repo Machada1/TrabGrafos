@@ -15,7 +15,7 @@ def testar_grafo_gexf():
     grafo.ponderar_arestas({23,24,25})
 
     
-    grafo.rotular_arestas(["Diogo gay","ivo","copão"])
+    
 
 
   
