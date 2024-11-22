@@ -10,10 +10,15 @@ def testar_grafo_gexf():
     grafo.adicionar_aresta(0, 2)
     grafo.adicionar_aresta(1, 2)
 
- 
+    grafo.ponderar_vertices([25,24,23])
+
+
+
+    grafo.rotular_arestas(["Diogo gay","ivo","copão"])
+
 
   
-    nome_arquivo = "grafoGexf3.gexf"
+    nome_arquivo = "Lastdance2.gexf"
     
     grafo.salvar_grafo_gexf(nome_arquivo)
     
