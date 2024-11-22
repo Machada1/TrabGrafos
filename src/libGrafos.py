@@ -250,46 +250,30 @@ class Grafo:
     
     # Algoritmo de Kosaraju para componentes fortemente conexos
     def kosaraju(self):
-        # Passo 1: DFS normal
-        visitados = [False] * self.num_vertices
-        ordem = []
-
-        def dfs(v):
-            visitados[v] = True
-            for vizinho, _ in self.lista_adjacencia[v]:
-                if not visitados[vizinho]:
-                    dfs(vizinho)
-            ordem.append(v)
-
-        for v in range(self.num_vertices):
-            if not visitados[v]:
-                dfs(v)
+        # Passo 1: DFS normal (usando o novo dfs_iterativo para obter a ordem de saída)
+        visitados = self.dfs_iterativo(0)  # Ordem de visita do grafo original
+        ordem = list(reversed(visitados))  # Ordem inversa para a segunda DFS
 
         # Passo 2: Transpor o grafo
         grafo_transposto = Grafo(self.num_vertices)
         for u in range(self.num_vertices):
-            for v, peso in self.lista_adjacencia[u]:
-                grafo_transposto.adicionar_aresta(v, u, peso)
+            for vizinho in self.lista_adjacencia[self.array_vertices[u]]:
+                grafo_transposto.adicionar_aresta(vizinho.indice, u)
 
         # Passo 3: DFS no grafo transposto na ordem inversa
-        visitados = [False] * self.num_vertices
         componentes = []
+        visitados_transposto = [False] * self.num_vertices
 
-        def dfs_transposto(v, componente):
-            visitados[v] = True
-            componente.append(v)
-            for vizinho, _ in grafo_transposto.lista_adjacencia[v]:
-                if not visitados[vizinho]:
-                    dfs_transposto(vizinho, componente)
-
-        for v in reversed(ordem):
-            if not visitados[v]:
-                componente = []
-                dfs_transposto(v, componente)
+        for v in ordem:
+            if not visitados_transposto[v]:
+                componente = grafo_transposto.dfs_iterativo(v)
                 componentes.append(componente)
+                for vertice in componente:
+                    visitados_transposto[vertice] = True
 
         print(f"Componentes fortemente conexos: {componentes}")
         return componentes
+
     
     def conectividade(self):
         if self.e_conexo(False):
@@ -557,23 +541,23 @@ class Grafo:
                 return False
         return True
     
-    def dfs(self,v=0):
-        t=0
-        tabela = {vertice : {'td':0,'tt':0,'pai':None} for vertice in self.array_vertices}
-        def busca(v):
-            nonlocal t
-            vertice = self.array_vertices[self.achar_vertice(v)]
-            t = t+1
-            tabela[vertice]['td'] = t
-            for vizinho in self.lista_adjacencia[vertice]:
-                if tabela[vizinho]['td'] == 0:
-                    tabela[vizinho]['pai'] = vertice
-                    busca(vizinho.indice)
-            t = t+1
-            tabela[vertice]['tt'] = t
-        for vertice in tabela:
-            if tabela[vertice]['td'] == 0:
-                busca(vertice.indice)
+    # def dfs(self,v=0):
+    #     t=0
+    #     tabela = {vertice : {'td':0,'tt':0,'pai':None} for vertice in self.array_vertices}
+    #     def busca(v):
+    #         nonlocal t
+    #         vertice = self.array_vertices[self.achar_vertice(v)]
+    #         t = t+1
+    #         tabela[vertice]['td'] = t
+    #         for vizinho in self.lista_adjacencia[vertice]:
+    #             if tabela[vizinho]['td'] == 0:
+    #                 tabela[vizinho]['pai'] = vertice
+    #                 busca(vizinho.indice)
+    #         t = t+1
+    #         tabela[vertice]['tt'] = t
+    #     for vertice in tabela:
+    #         if tabela[vertice]['td'] == 0:
+    #             busca(vertice.indice)
 
 class Aresta_Direcionada:
     def __init__(self, u, v, rotulo, peso):
