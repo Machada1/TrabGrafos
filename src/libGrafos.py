@@ -112,7 +112,6 @@ class Grafo:
 
     # Remove uma aresta entre os vértices u e v
     def remover_aresta(self, aresta):
-
         if self.achar_aresta(aresta) != -1:
             A = self.array_arestas[self.achar_aresta(aresta)]
             u = A.V1
@@ -123,8 +122,8 @@ class Grafo:
             self.matriz_adjacencia[A.V2.indice][A.V1.indice] = 0
 
             # Lista de Adjacencia
-            self.lista_adjacencia[u] = self.lista_adjacencia[u].remove(v)
-            self.lista_adjacencia[v] = self.lista_adjacencia[v].remove(u)
+            self.lista_adjacencia[u].remove(v) 
+            self.lista_adjacencia[v].remove(u)  
             
             # Matriz de Incidencia
             for aresta in self.matriz_incidencia:
@@ -135,7 +134,7 @@ class Grafo:
             # Array de arestas
             self.array_arestas.remove(A)
 
-            self.num_arestas = self.num_arestas - 1
+            self.num_arestas -= 1
 
         else:
             print('A aresta selecionada nao existe')
@@ -309,23 +308,30 @@ class Grafo:
 
     # Checa se há uma ponte (aresta cuja remoção desconecta o grafo)
     def e_ponte(self, u, v):
-        self.remover_aresta(u, v)
-        conexo_sem_aresta = self.e_conexo()
-        self.adicionar_aresta(u, v)  # Restaurar a aresta
-        print(f"A aresta ({u}, {v}) é {'uma ponte' if not conexo_sem_aresta else 'não uma ponte'}.")
-        return not conexo_sem_aresta
+        aresta = (u, v)
+        self.remover_aresta(aresta) 
+        conexo_sem_aresta = self.e_conexo()  
+        self.adicionar_aresta(u, v)  # Restaura a aresta
+
+        if not conexo_sem_aresta:
+            print(f"A aresta ({u}, {v}) é uma ponte.")
+        else:
+            print(f"A aresta ({u}, {v}) não é uma ponte.")
+
+        return not conexo_sem_aresta  # Retorna o estado correto da ponte
 
     # Checa se um vértice é um ponto de articulação (vértice cuja remoção desconecta o grafo)
-    def e_articulacao(self, vertice):
+    def e_articulacao(self, v):
+        vertice = self.array_vertices[self.achar_vertice(v)]
         original_adjacentes = self.lista_adjacencia[vertice][:]
-        for vizinho, peso in original_adjacentes:
-            self.remover_aresta(vertice, vizinho)
+        for item in original_adjacentes:
+            self.remover_aresta((vertice.indice,item.indice))
 
         conexo_sem_vertice = self.e_conexo()
 
         # Restaurar as arestas removidas
-        for vizinho, peso in original_adjacentes:
-            self.adicionar_aresta(vertice, vizinho, peso)
+        for item in original_adjacentes:
+            self.adicionar_aresta(vertice.indice, item.indice, item.peso)
 
         print(f"O vértice {vertice} é {'um ponto de articulação' if not conexo_sem_vertice else 'não um ponto de articulação'}.")
         return not conexo_sem_vertice
@@ -426,32 +432,6 @@ class Grafo:
 
         dfs(0)  # Começa do vértice 0
         return caminho
-
-    # def salvar_grafo_gexf(self, nome_arquivo):
-    #     with open(nome_arquivo, 'w') as f:
-    #         f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-    #         f.write('<gexf xmlns="http://www.gexf.net/1.3draft"\n')
-    #         f.write('     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n')
-    #         f.write('     xsi:schemaLocation="http://www.gexf.net/1.3draft http://www.gexf.net/1.3draft/gexf.xsd">\n')
-    #         f.write('  <graph mode="static" defaultedgetype="undirected">\n')
-    #         f.write('    <nodes>\n')
-    #         for i in range(self.num_vertices):
-    #             f.write(f'      <node id="{i}" label="{i}"/>\n')
-    #         f.write('    </nodes>\n')
-    #         f.write('    <edges>\n')
-    #         edge_id = 0
-    #         for u in range(self.num_vertices):
-    #             for v, peso in self.lista_adjacencia[u]:
-    #                 if u < v:  # Para não duplicar arestas
-    #                     f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" weight="{peso}"/>\n')
-    #                     edge_id += 1
-    #         f.write('    </edges>\n')
-    #         f.write('  </graph>\n')
-    #         f.write('</gexf>\n')
-
-    # def elementos_unicos(self,vetor):
-    #     return len(vetor) == len(set(vetor))
-
     # Função para verificar elementos únicos
     def elementos_unicos(vetor):
         return len(vetor) == len(set(vetor))
