@@ -12,13 +12,14 @@ def testar_grafo_gexf():
 
     grafo.ponderar_vertices([25,24,23])
 
+    grafo.ponderar_arestas({23,24,25})
 
-
+    
     grafo.rotular_arestas(["Diogo gay","ivo","copão"])
 
 
   
-    nome_arquivo = "Lastdance2.gexf"
+    nome_arquivo = "Lastdance16.gexf"
     
     grafo.salvar_grafo_gexf(nome_arquivo)
     

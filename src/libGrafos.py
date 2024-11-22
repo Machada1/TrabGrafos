@@ -450,7 +450,8 @@ class Grafo:
             f.write('    <nodes>\n')
             for vertice in self.array_vertices:
                 rotulo = vertice.rotulo if vertice.rotulo else vertice.indice
-                f.write(f'      <node id="{vertice.indice}" label="{rotulo}"/>\n')
+                peso = vertice.peso if vertice.peso else vertice.indice
+                f.write(f'      <node id="{vertice.indice}" label="{rotulo}"/>  weight="{peso}"/> \n')
             f.write('    </nodes>\n')
 
             # Adicionando arestas
@@ -460,7 +461,7 @@ class Grafo:
                 u, v = aresta.V1.indice, aresta.V2.indice 
                 peso = aresta.peso 
                 print(peso)
-                f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" weight="{peso}"/>\n')
+                f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" label="{peso}"/>\n')
                 edge_id += 1
             f.write('    </edges>\n')
             f.write('  </graph>\n')
