@@ -46,7 +46,6 @@ class Grafo:
         self.matriz_incidencia = []
         self.lista_adjacencia = {vertice: [] for vertice in self.array_vertices}
 
-    # Rotula os vertices do grafo
     def rotular_vertices(self,rotulos):
         if self.elementos_unicos(rotulos):
             if len(rotulos) == len(self.array_vertices):
@@ -57,7 +56,6 @@ class Grafo:
         else :
             print(f'O vetor de rotulos possui dois ou mais rotulos iguais')
 
-    # Pondera os vertices do grafo
     def ponderar_vertices(self,pesos):
         if len(pesos) == len(self.array_vertices):
             for i,peso in enumerate(pesos):
@@ -65,8 +63,6 @@ class Grafo:
         else:
             print(f'A quantidade de pesos fornecida nao condiz com a quantidade de vertices do grafo.')
 
-
-    # Adiciona uma aresta entre os vertices u e v
     def adicionar_aresta(self, V1, V2, rotulo=None, peso=1):
         if self.existe_aresta(V1,V2,False):
             print(f'A aresta {V1,V2} ja existe')
@@ -78,7 +74,6 @@ class Grafo:
 
             aresta = Aresta(u,v,rotulo,peso)
 
-            # Array de arestas
             self.array_arestas.append(aresta)
 
             # Matriz de Adjacencia
@@ -92,7 +87,7 @@ class Grafo:
                 elif vertice == v:
                     self.lista_adjacencia[vertice].append(u)
 
-            # Matriz de Incidencia (implementação simples)
+            # Matriz de Incidencia
             newAresta = []
             for i in range(self.num_vertices):
                 if i == u.indice or i == v.indice:
@@ -109,7 +104,6 @@ class Grafo:
         else :
             print('Um dos vertices selecionados nao existe')
 
-    # Remove uma aresta entre os vertices u e v
     def remover_aresta(self, aresta):
         if self.achar_aresta(aresta) != -1:
             A = self.array_arestas[self.achar_aresta(aresta)]
@@ -130,7 +124,6 @@ class Grafo:
                     self.matriz_incidencia.remove(aresta)
                     break
 
-            # Array de arestas
             self.array_arestas.remove(A)
 
             u.grau = u.grau - 1
@@ -153,7 +146,6 @@ class Grafo:
         self.num_vertices = self.num_vertices - 1
         self.array_vertices.pop(vertice.indice)
 
-    # Rotula as arestas do grafo
     def rotular_arestas(self,rotulos):
         if self.elementos_unicos:
             if len(rotulos) == len(self.array_arestas):
@@ -164,7 +156,6 @@ class Grafo:
         else :
             print(f'O vetor de rotulos possui dois ou mais rotulos iguais')
 
-    # Pondera as arestas do grafo
     def ponderar_arestas(self,pesos):
         if len(pesos) == len(self.array_arestas):
             for i,peso in enumerate(pesos):
@@ -177,12 +168,11 @@ class Grafo:
             print(f'A quantidade de pesos fornecida nao condiz com a quantidade de arestas do grafo.')
 
     
-    # Checa se dois vertices sao adjacentes
     def sao_adjacentesV(self, u, v):
         if self.achar_vertice(u) != -1 and self.achar_vertice(v) != -1:
             V1 = self.array_vertices[self.achar_vertice(u)]
             V2 = self.array_vertices[self.achar_vertice(v)]
-            if self.matriz_adjacencia[V1.indice][V2.indice] != 0:
+            if V1 in self.lista_adjacencia[V2] or V2 in self.lista_adjacencia[V1]:
                 print(f"Os vertices {u} e {v} sao adjacentes")
                 return True
             else:
@@ -192,7 +182,6 @@ class Grafo:
             print(f'Um dos vertices selecionados nao existe, logo eles nao sao adjacentes')
             return False
 
-    # Checa se duas arestas sao adjacentes
     def sao_adjacentesA(self, aresta1, aresta2):
         if self.achar_aresta(aresta1) != -1 and self.achar_aresta(aresta2) != -1:
             u=self.array_arestas[self.achar_aresta(aresta1)]
@@ -206,7 +195,6 @@ class Grafo:
         else:
             print("Alguma das arestas fornecidas nao existe, logo elas nao sao adjacentes")
             
-    # Checa se uma aresta existe entre dois vertices
     def existe_aresta(self, u, v, prnt=True):
         if self.matriz_adjacencia[u][v] != 0:
             if prnt:
@@ -217,17 +205,14 @@ class Grafo:
                 print(f"A aresta ({u},{v}) nao existe")
             return False 
         
-    # Checa o número de vertices
     def numero_vertices(self):
         print(f'quantidade de vertices: {self.num_vertices}')
         return self.num_vertices
 
-    # Checa o número de arestas
     def numero_arestas(self):
         print(f'quantidade de arestas: {self.num_arestas}')
         return self.num_arestas
 
-    # Checa se o grafo esta vazio
     def grafo_vazio(self):
         if self.num_arestas > 0:
             print('O grafo nao esta vazio')
@@ -235,7 +220,6 @@ class Grafo:
             print('O grafo esta vazio')
         return self.num_arestas
 
-    # Checa se o grafo e completo
     def grafo_completo(self):
         if self.num_arestas == (self.num_vertices*(self.num_vertices - 1))/2 :
             print("O grafo esta completo")
@@ -243,37 +227,21 @@ class Grafo:
             print("O grafo nao esta completo")
         return self.num_arestas == (self.num_vertices*(self.num_vertices - 1))/2
 
-    # Checa a conectividade do grafo (simplesmente conexo)
     def e_conexo(self, prnt=True):
-        # Usa o novo DFS iterativo para verificar a conectividade
-        visitados = self.dfs_iterativo(self.array_vertices[0].indice)  # Começa do vértice 0
-        conexo = len(visitados) == self.num_vertices  # Verifica se todos os vértices foram visitados
+        visitados = self.dfs_iterativo(self.array_vertices[0].indice)
+        if len(visitados) > 1:
+            conexo = len(visitados) == self.num_vertices
+        else:
+            soma = 0
+            for componente in visitados:
+                soma = soma + len(componente)
+            conexo = self.num_vertices == soma
         if prnt:  
             print(f"O grafo é {'conexo' if conexo else 'não conexo'}.")
         return conexo
     
-    # Algoritmo de Kosaraju para componentes fortemente conexos
     def kosaraju(self):
-        # Passo 1: DFS normal (usando o novo dfs_iterativo para obter a ordem de saída)
-        visitados = self.dfs_iterativo(self.array_vertices[0].indice)  # Ordem de visita do grafo original
-        ordem = list(reversed(visitados))  # Ordem inversa para a segunda DFS
-
-        # Passo 2: Transpor o grafo
-        grafo_transposto = Grafo(self.num_vertices)
-        for u in range(self.num_vertices):
-            for vizinho in self.lista_adjacencia[self.array_vertices[u]]:
-                grafo_transposto.adicionar_aresta(vizinho.indice, u)
-
-        # Passo 3: DFS no grafo transposto na ordem inversa
-        componentes = []
-        visitados_transposto = [False] * self.num_vertices
-
-        for v in ordem:
-            if not visitados_transposto[v]:
-                componente = grafo_transposto.dfs_iterativo(v)
-                componentes.append(componente)
-                for vertice in componente:
-                    visitados_transposto[vertice] = True
+        componentes = self.dfs_iterativo(self.array_vertices[0].indice)
 
         print(f"Componentes fortemente conexos: {componentes}")
         return componentes
@@ -285,23 +253,24 @@ class Grafo:
         else:
             print("O grafo e deconexo")
 
-
-    # Checa se há uma ponte (aresta cuja remoção desconecta o grafo)
     def e_ponte(self, u, v, prnt=True):
-        aresta = (u, v)
-        self.remover_aresta(aresta) 
-        conexo_sem_aresta = self.e_conexo(False)  
-        self.adicionar_aresta(u, v)  # Restaura a aresta
+        if self.e_conexo():
+            aresta = (u, v)
+            self.remover_aresta(aresta) 
+            conexo_sem_aresta = self.e_conexo(False)  
+            self.adicionar_aresta(u, v)
 
-        if prnt:
-            if not conexo_sem_aresta:
-                print(f"A aresta ({u}, {v}) e uma ponte.")
-            else:
-                print(f"A aresta ({u}, {v}) nao e uma ponte.")
+            if prnt:
+                if not conexo_sem_aresta:
+                    print(f"A aresta ({u}, {v}) e uma ponte.")
+                else:
+                    print(f"A aresta ({u}, {v}) nao e uma ponte.")
 
-        return not conexo_sem_aresta  # Retorna o estado correto da ponte
+            return not conexo_sem_aresta
+        else:
+            print(f"A aresta ({u}, {v}) nao e uma ponte pois o grafo ja e desconexo.")
+            return False
 
-    # Checa se um vertice e um ponto de articulacao (vertice cuja remoção desconecta o grafo)
     def e_articulacao(self, v):
         if self.e_conexo(False):
             grafo_aux = copy.deepcopy(self)
@@ -315,11 +284,11 @@ class Grafo:
         else:
             print('O vertice nao e uma articulacao pois o grafo ja e desconexo')
 
-    # Função para gerar um grafo aleatório
     def graforandom(self, num_arestas=0):
         if num_arestas == 0:
-            max_arestas = random.randint(1, ((self.num_vertices * (self.num_vertices - 1)) // 2))
-            num_arestas = max(1, max_arestas // 100)
+            num_arestas = random.randint(1, ((self.num_vertices * (self.num_vertices - 1)) // 2))
+            #max_arestas = random.randint(1, ((self.num_vertices * (self.num_vertices - 1)) // 2))
+            #num_arestas = max(1, max_arestas // 100)
         if num_arestas > (self.num_vertices * (self.num_vertices - 1)) // 2:
             print("Número de arestas excede o máximo possível para um grafo simples.")
             return
@@ -342,10 +311,9 @@ class Grafo:
         disc[u] = low[u] = self.time
         self.time += 1
 
-        # Acessando a lista de adjacência corretamente usando o índice de 'u'
-        for vertice in self.lista_adjacencia[self.array_vertices[u]]:  # Acesse corretamente o índice do vertice
+        for vertice in self.lista_adjacencia[self.array_vertices[u]]:
             v = vertice.indice
-            if not visitados[v]:  # v nao visitado
+            if not visitados[v]:
                 parent[v] = u
                 self.tarjan_ponte_util(v, visitados, disc, low, parent, pontes)
 
@@ -377,11 +345,46 @@ class Grafo:
 
     def euleriano(self):
         impares = 0
-        for u in self.lista_adjacencia:
-            grau = len(self.lista_adjacencia[u])
-            if grau % 2 != 0:
+        for vertice in self.array_vertices:
+            if vertice.grau % 2 != 0:
                 impares += 1
         return impares == 0 or impares == 2
+
+    def fleury_tarjan(self):
+        pontes = self.detectar_ponte_tarjan()
+        if not self.euleriano() or not self.e_conexo(False):
+            print("O grafo nao e euleriano.")
+            return None
+
+        grafo_aux = copy.deepcopy(self)
+        caminho = []
+        
+        for vertice in grafo_aux.array_vertices:
+            if vertice.grau % 2 != 0:
+                v = vertice
+                break
+            else:
+                v = grafo_aux.array_vertices[0]
+        caminho.append(v.indice)
+        while grafo_aux.num_arestas > 0:
+            if v.grau > 1:
+                for vizinho in grafo_aux.lista_adjacencia[v]:
+                    if not (v.indice, vizinho.indice) in pontes:
+                        caminho.append(vizinho.indice)
+                        grafo_aux.remover_aresta((v.indice,vizinho.indice))
+                        v = vizinho
+            else:
+                vizinho = grafo_aux.lista_adjacencia[v][0]
+                caminho.append(vizinho.indice)
+                grafo_aux.remover_aresta((v.indice,vizinho.indice))
+                v = vizinho
+        print(f"Caminho euleriano:{caminho}")
+        if caminho[0] == caminho[len(caminho)-1]:
+            print("O grafo e euleriano")
+        else:
+            print("O grafo e semi-euleriano")
+        
+
 
     def fleury_naive(self):
         if not self.euleriano() or not self.e_conexo(False):
@@ -416,12 +419,6 @@ class Grafo:
         else:
             print("O grafo e semi-euleriano")
 
-
-    # Função para verificar elementos únicos
-    def elementos_unicos(vetor):
-        return len(vetor) == len(set(vetor))
-
-
     # Salvar o grafo no formato GEXF
     def salvar_grafo_gexf(self, nome_arquivo):
         with open(nome_arquivo, 'w') as f:
@@ -453,17 +450,14 @@ class Grafo:
             f.write('</gexf>\n')
 
 
-    # Imprime os arestas do grafo com seus rotulos e pesos
     def imprimir_arestas(self):
         for i in range(len(self.array_arestas)):
             self.array_arestas[i].imprimir_aresta()
 
-    # Imprime os vertices do grafo com seus rotulos e pesos
     def imprimir_vertices(self):
         for i in range(len(self.array_vertices)):
             self.array_vertices[i].imprimir_vertice()
 
-    # Metodo para imprimir a matriz de adjacencia
     def imprimir_matriz_adjacencia(self):
 
         print("Matriz de Adjacencia:")
@@ -478,7 +472,6 @@ class Grafo:
             for i, linha in enumerate(self.matriz_adjacencia):
                 print(f"{i} | " + " ".join(map(str, linha)))
 
-    # Metodo para imprimir a matriz de incidencia
     def imprimir_matriz_incidencia(self):
 
         print("Matriz de Incidencia:")
@@ -497,7 +490,6 @@ class Grafo:
             for i, linha in enumerate(self.matriz_incidencia):
                 print(f"{i} | " + " ".join(map(str, linha)))
 
-    # Metodo para imprimir a lista de adjacencia
     def imprimir_lista_adjacencia(self):
         print("Lista de Adjacencia:")
         if self.vertices_rotulados():
@@ -546,37 +538,23 @@ class Grafo:
         return True
     
     def dfs_iterativo(self, u):
-        vertice = self.array_vertices[self.achar_vertice(u)]
         visitados = [False] * self.num_vertices
-        stack = [vertice]
         ordem_visita = []
-        while stack:
-            vertice_atual = stack.pop()
-            if not visitados[self.array_vertices.index(vertice_atual)]:
-                visitados[self.array_vertices.index(vertice_atual)] = True
-                ordem_visita.append(vertice_atual.indice)
-                for vizinho in self.lista_adjacencia[vertice_atual]:
-                    if not visitados[self.array_vertices.index(vizinho)]:
-                        stack.append(vizinho)
+        while False in visitados:
+            vertice = self.array_vertices[visitados.index(False)]
+            stack = [vertice]
+            componente = []
+            while stack:
+                vertice_atual = stack.pop()
+                if not visitados[self.array_vertices.index(vertice_atual)]:
+                    visitados[self.array_vertices.index(vertice_atual)] = True
+                    componente.append(vertice_atual.indice)
+                    for vizinho in self.lista_adjacencia[vertice_atual]:
+                        if not visitados[self.array_vertices.index(vizinho)]:
+                            stack.append(vizinho)
+            ordem_visita.append(componente)
         return ordem_visita
     
-    # def dfs(self,v=0):
-    #     t=0
-    #     tabela = {vertice : {'td':0,'tt':0,'pai':None} for vertice in self.array_vertices}
-    #     def busca(v):
-    #         nonlocal t
-    #         vertice = self.array_vertices[self.achar_vertice(v)]
-    #         t = t+1
-    #         tabela[vertice]['td'] = t
-    #         for vizinho in self.lista_adjacencia[vertice]:
-    #             if tabela[vizinho]['td'] == 0:
-    #                 tabela[vizinho]['pai'] = vertice
-    #                 busca(vizinho.indice)
-    #         t = t+1
-    #         tabela[vertice]['tt'] = t
-    #     for vertice in tabela:
-    #         if tabela[vertice]['td'] == 0:
-    #             busca(vertice.indice)
 
 class Aresta_Direcionada:
     def __init__(self, u, v, rotulo, peso):
@@ -597,7 +575,6 @@ class Aresta_Direcionada:
 
 class Direcionado(Grafo):
 
-    # Adiciona uma aresta entre os vertices u e v
     def adicionar_aresta(self, V1, V2, rotulo=None, peso=1):
         for aresta in self.array_arestas:
             U = self.array_vertices[self.achar_vertice(V1)]
@@ -614,7 +591,6 @@ class Direcionado(Grafo):
 
             aresta = Aresta_Direcionada(u,v,rotulo,peso)
 
-            # Array de arestas
             self.array_arestas.append(aresta)
 
             # Matriz de Adjacencia
@@ -625,7 +601,7 @@ class Direcionado(Grafo):
                 if vertice == u:
                     self.lista_adjacencia[vertice].append(v)
 
-            # Matriz de Incidencia (implementação simples)
+            # Matriz de Incidencia
             newAresta = []
             for i in range(self.num_vertices):
                 if i == u.indice:
@@ -663,7 +639,6 @@ class Direcionado(Grafo):
                     self.matriz_incidencia.remove(aresta)
                     break
 
-            # Array de arestas
             self.array_arestas.remove(A)
 
             u.grau = u.grau - 1
@@ -711,3 +686,21 @@ class Direcionado(Grafo):
                 return i
         return -1
 
+    def grafo_completo(self):
+        if self.num_arestas == (self.num_vertices*(self.num_vertices - 1)):
+            print("O grafo esta completo")
+        else :
+            print("O grafo nao esta completo")
+        return self.num_arestas == (self.num_vertices*(self.num_vertices - 1))
+    
+    def conectividade(self):
+        componentes = self.kosaraju()
+        grafo_aux = Grafo(self.num_vertices)
+        for aresta in self.array_arestas:
+            grafo_aux.adicionar_aresta(aresta.V1.indice,aresta.V2.indice)
+        if len(componentes) == 1:
+            print('O grafo é fortemente conexo')
+        elif grafo_aux.e_conexo():
+            print('O grafo é semi-fortemente conexo')
+        else:
+            print('O grafo é desconexo')

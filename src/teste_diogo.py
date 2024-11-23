@@ -83,13 +83,3 @@ from libGrafos import Direcionado
 # grafo.imprimir_matriz_adjacencia()
 # print("\n")
 # grafo.imprimir_matriz_incidencia()
-
-grafo2 = Grafo(5)
-grafo2.adicionar_aresta(0,1)
-grafo2.adicionar_aresta(1,2)
-grafo2.adicionar_aresta(2,3)
-grafo2.adicionar_aresta(3,4)
-grafo2.adicionar_aresta(4,0)
-grafo2.adicionar_aresta(3,1)
-grafo2.imprimir_vertices()
-grafo2.imprimir_lista_adjacencia()
