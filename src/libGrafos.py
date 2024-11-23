@@ -144,8 +144,12 @@ class Grafo:
     def remover_vertice(self,v):
         vertice = self.array_vertices[self.achar_vertice(v)]
         adjacentes = self.lista_adjacencia[vertice]
+        vizinhos = []
         for vizinho in adjacentes:
-            self.remover_aresta((vertice.indice,vizinho.indice))
+            vizinhos.append(vizinho)
+        for item in vizinhos:
+            self.remover_aresta((vertice.indice,item.indice))
+        del self.lista_adjacencia[vertice]
         self.num_vertices = self.num_vertices - 1
         self.array_vertices.pop(vertice.indice)
 
@@ -242,7 +246,7 @@ class Grafo:
     # Checa a conectividade do grafo (simplesmente conexo)
     def e_conexo(self, prnt=True):
         # Usa o novo DFS iterativo para verificar a conectividade
-        visitados = self.dfs_iterativo(0)  # Começa do vértice 0
+        visitados = self.dfs_iterativo(self.array_vertices[0].indice)  # Começa do vértice 0
         conexo = len(visitados) == self.num_vertices  # Verifica se todos os vértices foram visitados
         if prnt:  
             print(f"O grafo é {'conexo' if conexo else 'não conexo'}.")
@@ -251,7 +255,7 @@ class Grafo:
     # Algoritmo de Kosaraju para componentes fortemente conexos
     def kosaraju(self):
         # Passo 1: DFS normal (usando o novo dfs_iterativo para obter a ordem de saída)
-        visitados = self.dfs_iterativo(0)  # Ordem de visita do grafo original
+        visitados = self.dfs_iterativo(self.array_vertices[0].indice)  # Ordem de visita do grafo original
         ordem = list(reversed(visitados))  # Ordem inversa para a segunda DFS
 
         # Passo 2: Transpor o grafo
@@ -302,7 +306,6 @@ class Grafo:
         if self.e_conexo(False):
             grafo_aux = copy.deepcopy(self)
             grafo_aux.remover_vertice(v)
-            
             articulacao = grafo_aux.e_conexo(False)
             if not articulacao:
                 print(f"O vertice {v} e articulacao")
@@ -540,27 +543,20 @@ class Grafo:
                 return False
         return True
     
-    def dfs_iterativo(self, u: int) -> list:
-        # Inicializa a lista de vértices visitados e a pilha
+    def dfs_iterativo(self, u):
+        vertice = self.array_vertices[self.achar_vertice(u)]
         visitados = [False] * self.num_vertices
-        stack = [u]  # Adiciona o vértice inicial na pilha
-        ordem_visita = []  # Armazena a ordem de visita dos vértices
-
+        stack = [vertice]
+        ordem_visita = []
         while stack:
             vertice_atual = stack.pop()
-            if not visitados[vertice_atual]:
-                visitados[vertice_atual] = True
-                ordem_visita.append(vertice_atual)
-
-                # Adiciona os vizinhos do vértice na pilha
-                for vizinho in self.lista_adjacencia[self.array_vertices[vertice_atual]]:
-                    print(vizinho.indice)
-                    print(len(visitados))
-                    if not visitados[vizinho.indice]:
-                        stack.append(vizinho.indice)
-
+            if not visitados[self.array_vertices.index(vertice_atual)]:
+                visitados[self.array_vertices.index(vertice_atual)] = True
+                ordem_visita.append(vertice_atual.indice)
+                for vizinho in self.lista_adjacencia[vertice_atual]:
+                    if not visitados[self.array_vertices.index(vizinho)]:
+                        stack.append(vizinho)
         return ordem_visita
-
     
     # def dfs(self,v=0):
     #     t=0
