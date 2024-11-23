@@ -144,11 +144,14 @@ class Grafo:
     def remover_vertice(self,v):
         vertice = self.array_vertices[self.achar_vertice(v)]
         adjacentes = self.lista_adjacencia[vertice]
+        vizinhos = []
         for vizinho in adjacentes:
-            self.remover_aresta((vertice.indice,vizinho.indice))
+            vizinhos.append(vizinho)
+        for item in vizinhos:
+            self.remover_aresta((vertice.indice,item.indice))
+        del self.lista_adjacencia[vertice]
         self.num_vertices = self.num_vertices - 1
         self.array_vertices.pop(vertice.indice)
-        self.imprimir_vertices()
 
     # Rotula as arestas do grafo
     def rotular_arestas(self,rotulos):
@@ -241,55 +244,40 @@ class Grafo:
         return self.num_arestas == (self.num_vertices*(self.num_vertices - 1))/2
 
     # Checa a conectividade do grafo (simplesmente conexo)
-    def e_conexo(self):
+    def e_conexo(self, prnt=True):
         # Usa o novo DFS iterativo para verificar a conectividade
-        visitados = self.dfs_iterativo(0)  # Começa do vértice 0
+        visitados = self.dfs_iterativo(self.array_vertices[0].indice)  # Começa do vértice 0
         conexo = len(visitados) == self.num_vertices  # Verifica se todos os vértices foram visitados
-        print(f"O grafo é {'conexo' if conexo else 'não conexo'}.")
+        if prnt:  
+            print(f"O grafo é {'conexo' if conexo else 'não conexo'}.")
         return conexo
     
     # Algoritmo de Kosaraju para componentes fortemente conexos
     def kosaraju(self):
-        # Passo 1: DFS normal
-        visitados = [False] * self.num_vertices
-        ordem = []
-
-        def dfs(v):
-            visitados[v] = True
-            for vizinho, _ in self.lista_adjacencia[v]:
-                if not visitados[vizinho]:
-                    dfs(vizinho)
-            ordem.append(v)
-
-        for v in range(self.num_vertices):
-            if not visitados[v]:
-                dfs(v)
+        # Passo 1: DFS normal (usando o novo dfs_iterativo para obter a ordem de saída)
+        visitados = self.dfs_iterativo(self.array_vertices[0].indice)  # Ordem de visita do grafo original
+        ordem = list(reversed(visitados))  # Ordem inversa para a segunda DFS
 
         # Passo 2: Transpor o grafo
         grafo_transposto = Grafo(self.num_vertices)
         for u in range(self.num_vertices):
-            for v, peso in self.lista_adjacencia[u]:
-                grafo_transposto.adicionar_aresta(v, u, peso)
+            for vizinho in self.lista_adjacencia[self.array_vertices[u]]:
+                grafo_transposto.adicionar_aresta(vizinho.indice, u)
 
         # Passo 3: DFS no grafo transposto na ordem inversa
-        visitados = [False] * self.num_vertices
         componentes = []
+        visitados_transposto = [False] * self.num_vertices
 
-        def dfs_transposto(v, componente):
-            visitados[v] = True
-            componente.append(v)
-            for vizinho, _ in grafo_transposto.lista_adjacencia[v]:
-                if not visitados[vizinho]:
-                    dfs_transposto(vizinho, componente)
-
-        for v in reversed(ordem):
-            if not visitados[v]:
-                componente = []
-                dfs_transposto(v, componente)
+        for v in ordem:
+            if not visitados_transposto[v]:
+                componente = grafo_transposto.dfs_iterativo(v)
                 componentes.append(componente)
+                for vertice in componente:
+                    visitados_transposto[vertice] = True
 
         print(f"Componentes fortemente conexos: {componentes}")
         return componentes
+
     
     def conectividade(self):
         if self.e_conexo(False):
@@ -318,9 +306,7 @@ class Grafo:
         if self.e_conexo(False):
             grafo_aux = copy.deepcopy(self)
             grafo_aux.remover_vertice(v)
-            
             articulacao = grafo_aux.e_conexo(False)
-            print(articulacao)
             if not articulacao:
                 print(f"O vertice {v} e articulacao")
             else:
@@ -557,23 +543,38 @@ class Grafo:
                 return False
         return True
     
-    def dfs(self,v=0):
-        t=0
-        tabela = {vertice : {'td':0,'tt':0,'pai':None} for vertice in self.array_vertices}
-        def busca(v):
-            nonlocal t
-            vertice = self.array_vertices[self.achar_vertice(v)]
-            t = t+1
-            tabela[vertice]['td'] = t
-            for vizinho in self.lista_adjacencia[vertice]:
-                if tabela[vizinho]['td'] == 0:
-                    tabela[vizinho]['pai'] = vertice
-                    busca(vizinho.indice)
-            t = t+1
-            tabela[vertice]['tt'] = t
-        for vertice in tabela:
-            if tabela[vertice]['td'] == 0:
-                busca(vertice.indice)
+    def dfs_iterativo(self, u):
+        vertice = self.array_vertices[self.achar_vertice(u)]
+        visitados = [False] * self.num_vertices
+        stack = [vertice]
+        ordem_visita = []
+        while stack:
+            vertice_atual = stack.pop()
+            if not visitados[self.array_vertices.index(vertice_atual)]:
+                visitados[self.array_vertices.index(vertice_atual)] = True
+                ordem_visita.append(vertice_atual.indice)
+                for vizinho in self.lista_adjacencia[vertice_atual]:
+                    if not visitados[self.array_vertices.index(vizinho)]:
+                        stack.append(vizinho)
+        return ordem_visita
+    
+    # def dfs(self,v=0):
+    #     t=0
+    #     tabela = {vertice : {'td':0,'tt':0,'pai':None} for vertice in self.array_vertices}
+    #     def busca(v):
+    #         nonlocal t
+    #         vertice = self.array_vertices[self.achar_vertice(v)]
+    #         t = t+1
+    #         tabela[vertice]['td'] = t
+    #         for vizinho in self.lista_adjacencia[vertice]:
+    #             if tabela[vizinho]['td'] == 0:
+    #                 tabela[vizinho]['pai'] = vertice
+    #                 busca(vizinho.indice)
+    #         t = t+1
+    #         tabela[vertice]['tt'] = t
+    #     for vertice in tabela:
+    #         if tabela[vertice]['td'] == 0:
+    #             busca(vertice.indice)
 
 class Aresta_Direcionada:
     def __init__(self, u, v, rotulo, peso):
@@ -707,23 +708,4 @@ class Direcionado(Grafo):
             if valor in indices or valor == aresta.rotulo:
                 return i
         return -1
-    
-    def dfs_iterativo(self, u: int) -> list:
-        # Inicializa a lista de vértices visitados e a pilha
-        visitados = [False] * self.num_vertices
-        stack = [u]  # Adiciona o vértice inicial na pilha
-        ordem_visita = []  # Armazena a ordem de visita dos vértices
-
-        while stack:
-            vertice_atual = stack.pop()
-            if not visitados[vertice_atual]:
-                visitados[vertice_atual] = True
-                ordem_visita.append(vertice_atual)
-
-                # Adiciona os vizinhos do vértice na pilha
-                for vizinho in reversed(self.lista_adjacencia[self.array_vertices[vertice_atual]]):
-                    if not visitados[vizinho.indice]:
-                        stack.append(vizinho.indice)
-
-        return ordem_visita
 
