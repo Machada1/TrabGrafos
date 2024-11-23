@@ -86,8 +86,11 @@ class Grafo:
             self.matriz_adjacencia[v.indice][u.indice] = peso
 
             # Lista de Adjacencia
-            self.lista_adjacencia[self.array_vertices[self.array_vertices.index(u)]].append(v)
-            self.lista_adjacencia[self.array_vertices[self.array_vertices.index(v)]].append(v)
+            for vertice in self.array_vertices:
+                if vertice == u:
+                    self.lista_adjacencia[vertice].append(v)
+                elif vertice == v:
+                    self.lista_adjacencia[vertice].append(u)
 
             # Matriz de Incidencia (implementação simples)
             newAresta = []
@@ -315,8 +318,7 @@ class Grafo:
     # Função para gerar um grafo aleatório
     def graforandom(self, num_arestas=0):
         if num_arestas == 0:
-            max_arestas = random.randint(1, ((self.num_vertices * (self.num_vertices - 1)) // 2))
-            num_arestas = max(1, max_arestas // 10)
+            num_arestas = random.randint(1, ((self.num_vertices * (self.num_vertices - 1)) // 2))
         if num_arestas > (self.num_vertices * (self.num_vertices - 1)) // 2:
             print("Número de arestas excede o máximo possível para um grafo simples.")
             return
@@ -340,8 +342,7 @@ class Grafo:
         self.time += 1
 
         # Acessando a lista de adjacência corretamente usando o índice de 'u'
-        for vertice in self.lista_adjacencia[self.array_vertices[u]]:  # Acesse corretamente o índice do vertice
-            v = vertice.indice
+        for v in self.lista_adjacencia[self.array_vertices[u]]:  # Acesse corretamente o índice do vertice
             if not visitados[v]:  # v nao visitado
                 parent[v] = u
                 self.tarjan_ponte_util(v, visitados, disc, low, parent, pontes)
