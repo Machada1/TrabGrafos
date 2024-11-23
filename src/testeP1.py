@@ -52,6 +52,14 @@ grafo.grafo_completo()
 grafo.e_conexo()
 grafo.remover_aresta((1,2))
 grafo.e_conexo()
+
+
+
+
+
+
+
+
 #testa função de gerar grafo aleatório
 grafo = Grafo(10)
 grafo.graforandom(0)
