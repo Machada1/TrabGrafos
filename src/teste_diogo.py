@@ -95,5 +95,5 @@ from libGrafos import Direcionado
 # grafo2.fleury_naive()
 
 grafo3 = Grafo(1000)
-grafo3.graforandom()
+grafo3.graforandom(30000)
 grafo3.fleury_naive()
