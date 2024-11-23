@@ -1,19 +1,19 @@
 from libGrafos import Grafo, Aresta, Vertice
 
 #Cria vértices do Grafo
-grafo = Grafo(5)
+grafo = Grafo(4)
 #Rotula e pondera vértices criados.
-grafo.rotular_vertices(["A", "B", "C","D","E"])
-grafo.ponderar_vertices([1,2,3,4,5])
+grafo.rotular_vertices(["A","B","C","D",])
+grafo.ponderar_vertices([1,2,3,4])
 grafo.imprimir_vertices()
 
 #Cria, rotula e pondera arestas
 grafo.imprimir_arestas()
-grafo.adicionar_aresta("A","B")
-grafo.adicionar_aresta(1,2)
-grafo.adicionar_aresta("B", 3)
+grafo.adicionar_aresta(0,1)
+# grafo.adicionar_aresta(1,2)
+# grafo.adicionar_aresta(1, 3)
 grafo.adicionar_aresta(2,3)
-grafo.ponderar_arestas([4,3,2,1,0])
+# grafo.ponderar_arestas([4,3,2,1])
 grafo.imprimir_arestas()
 grafo.imprimir_vertices()
 
@@ -52,11 +52,11 @@ grafo.grafo_completo()
 
 #Checa se é conexo
 grafo.e_conexo()
-grafo.remover_aresta((1,2))
-grafo.remover_aresta((2,3))
+# grafo.remover_aresta((1,2))
+# grafo.remover_aresta((2,3))
 grafo.e_conexo()
-grafo.adicionar_aresta((1,2))
-grafo.adicionar_aresta((2,3))
+# grafo.adicionar_aresta(1,2)
+# grafo.adicionar_aresta(2,3)
 
 
 # Checa ponte
@@ -68,7 +68,7 @@ grafo.e_articulacao(1)
 grafo.e_articulacao(2)
 
 # Checa Kosaraju
-grafo.kosaraju
+grafo.kosaraju()
 
 
 
