@@ -6,7 +6,9 @@ Dir.ponderar_vertices([1,2,3])
 
 Dir.adicionar_aresta(0,1,"AB",5)
 Dir.adicionar_aresta(1,2,"BC",10)
-#Dir.adicionar_aresta(2,0,"CA",1)
+Dir.adicionar_aresta(2,0,"CA",1)
+
+Dir.e_conexo()
 
 Dir.imprimir_lista_adjacencia()
 Dir.imprimir_matriz_adjacencia()
@@ -29,3 +31,10 @@ Dir.grafo_vazio()
 Dir.grafo_completo()
 
 Dir.kosaraju()
+
+Dir.conectividade()
+Dir.remover_aresta((2,0))
+Dir.conectividade()
+Dir.remover_aresta((1,2))
+Dir.e_conexo()
+Dir.conectividade()

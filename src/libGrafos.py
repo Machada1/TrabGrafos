@@ -1,5 +1,6 @@
 import random
 import copy
+import time
 
 class Vertice:
     def __init__(self, indice, rotulo=None, peso=None):
@@ -317,9 +318,10 @@ class Grafo:
 
     # Função para gerar um grafo aleatório
     def graforandom(self, num_arestas=0):
+        start_time = time.time()
         if num_arestas == 0:
             max_arestas = random.randint(1, ((self.num_vertices * (self.num_vertices - 1)) // 2))
-            num_arestas = max(1, max_arestas // 100)
+            num_arestas = max(1, max_arestas // 500)
         if num_arestas > (self.num_vertices * (self.num_vertices - 1)) // 2:
             print("Número de arestas excede o máximo possível para um grafo simples.")
             return
@@ -333,7 +335,8 @@ class Grafo:
                 v = random.randint(0, self.num_vertices - 1)
             
             self.adicionar_aresta(u, v)
-
+        end_time = time.time()
+        print(f"Grafo aleatório gerado em: {end_time - start_time:.5f} segundos")
         print(f"Grafo aleatorio gerado com {num_arestas} arestas.")
     
         
@@ -382,6 +385,7 @@ class Grafo:
             if grau % 2 != 0:
                 impares += 1
         return impares == 0 or impares == 2
+        
 
     def fleury_naive(self):
         if not self.euleriano() or not self.e_conexo(False):
