@@ -14,11 +14,6 @@ def testar_grafo_gexf():
 
     grafo.ponderar_arestas({23,24,25})
 
-    
-    
-
-
-  
     nome_arquivo = "Lastdance16.gexf"
     
     grafo.salvar_grafo_gexf(nome_arquivo)
