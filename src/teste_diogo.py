@@ -1,6 +1,7 @@
 from libGrafos import Grafo
 from libGrafos import Vertice
 from libGrafos import Aresta
+from libGrafos import Direcionado
 
 # grafo = Grafo(10)
 # grafo.grafo_vazio()
@@ -83,9 +84,16 @@ from libGrafos import Aresta
 # print("\n")
 # grafo.imprimir_matriz_incidencia()
 
-grafo2 = Grafo(5)
-grafo2.adicionar_aresta(0,1)
-grafo2.adicionar_aresta(1,2)
-grafo2.adicionar_aresta(2,3)
-grafo2.adicionar_aresta(3,4)
-grafo2.adicionar_aresta(2,4)
+# grafo2 = Grafo(5)
+# grafo2.adicionar_aresta(0,1)
+# grafo2.adicionar_aresta(1,2)
+# grafo2.adicionar_aresta(2,3)
+# grafo2.adicionar_aresta(3,4)
+# grafo2.adicionar_aresta(4,0)
+# grafo2.adicionar_aresta(3,1)
+# grafo2.imprimir_vertices()
+# grafo2.fleury_naive()
+
+grafo3 = Grafo(1000)
+grafo3.graforandom()
+grafo3.fleury_naive()
