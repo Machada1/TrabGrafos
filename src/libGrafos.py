@@ -285,27 +285,81 @@ class Grafo:
         else:
             print('O vertice nao e uma articulacao pois o grafo ja e desconexo')
 
+    def adicionar_aresta_otimizado(self, V1, V2, arestas_set, rotulo=None, peso=1):
+        if (V1, V2) in arestas_set or (V2, V1) in arestas_set:
+            return 
+
+        arestas_set.add((V1, V2))
+        u = self.array_vertices[V1]
+        v = self.array_vertices[V2]
+        aresta = Aresta(u, v, rotulo, peso)
+
+        self.array_arestas.append(aresta)
+
+        # Matriz de Adjacência
+        self.matriz_adjacencia[u.indice][v.indice] = peso
+        self.matriz_adjacencia[v.indice][u.indice] = peso
+
+        # Lista de Adjacência
+        self.lista_adjacencia[u].append(v)
+        self.lista_adjacencia[v].append(u)
+
+        # Matriz de Incidência
+        new_aresta = [1 if i in [u.indice, v.indice] else 0 for i in range(self.num_vertices)]
+        self.matriz_incidencia.append(new_aresta)
+
+        u.grau += 1
+        v.grau += 1
+        self.num_arestas += 1
+            
+
     def graforandom(self, num_arestas=0):
         start_time = time.time()
         if num_arestas == 0:
             max_arestas = random.randint(1, ((self.num_vertices * (self.num_vertices - 1)) // 2))
-            num_arestas = max(1, max_arestas // 500)
+            num_arestas = max(1, max_arestas // 10)
         if num_arestas > (self.num_vertices * (self.num_vertices - 1)) // 2:
             print("Número de arestas excede o máximo possível para um grafo simples.")
             return
 
+        arestas_set = set()
         for _ in range(num_arestas):
             u = random.randint(0, self.num_vertices - 1)
             v = random.randint(0, self.num_vertices - 1)
-            
-            while self.existe_aresta(u,v,False) or u == v:
+            while u == v or (u, v) in arestas_set or (v, u) in arestas_set:
                 u = random.randint(0, self.num_vertices - 1)
                 v = random.randint(0, self.num_vertices - 1)
+
             
-            self.adicionar_aresta(u, v)
+            self.adicionar_aresta_otimizado(u, v, arestas_set)
+            arestas_set.add((u,v))
+
         end_time = time.time()
         print(f"Grafo aleatório gerado em: {end_time - start_time:.5f} segundos")
-        print(f"Grafo aleatorio gerado com {num_arestas} arestas.")
+        print(f"Grafo aleatório gerado com {num_arestas} arestas.")
+
+    # def graforandom(self, num_arestas=0):
+    #     start_time = time.time()
+
+    #     if num_arestas == 0:
+    #         max_arestas = (self.num_vertices * (self.num_vertices - 1)) // 2
+    #         num_arestas = max(1, max_arestas // 10)
+
+    #     if num_arestas > (self.num_vertices * (self.num_vertices - 1)) // 2:
+    #         print("Número de arestas excede o máximo possível para um grafo simples.")
+    #         return
+
+    #     todas_arestas = [(u, v) for u in range(self.num_vertices) for v in range(u + 1, self.num_vertices)]
+
+    #     random.shuffle(todas_arestas)
+
+    #     for u, v in todas_arestas[:num_arestas]:
+    #         self.adicionar_aresta(u, v)
+
+    #     end_time = time.time()
+    #     print(f"Grafo aleatório gerado em: {end_time - start_time:.5f} segundos")
+    #     print(f"Grafo aleatorio gerado com {num_arestas} arestas.")
+
     
         
     def tarjan_ponte_util(self, u, visitados, disc, low, parent, pontes):

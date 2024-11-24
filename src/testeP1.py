@@ -69,6 +69,13 @@ grafo.e_articulacao(2)
 
 # Checa Kosaraju
 grafo.kosaraju()
+grafo.remover_aresta((1,3))
+grafo.remover_aresta((1,2))
+
+grafo.kosaraju()
+grafo.adicionar_aresta(1,3)
+grafo.adicionar_aresta(1,2)
+grafo.kosaraju()
 
 print(grafo.euleriano())
 grafo.remover_aresta((2,3))
