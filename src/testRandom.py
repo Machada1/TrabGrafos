@@ -21,7 +21,7 @@ def testar_graforandom(tamanhos):
     return resultados
 
 # Definindo os tamanhos a serem testados
-tamanhos = [5, 10, 50, 100, 500, 1000, 5000, 10000]  # Ajuste para evitar tamanhos excessivos
+tamanhos = [5, 10, 50, 100, 500, 1000, 2000, 5000, 10000, 50000,100000]
 
 if __name__ == "__main__":
     resultados = testar_graforandom(tamanhos)

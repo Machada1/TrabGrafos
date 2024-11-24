@@ -231,7 +231,7 @@ class Grafo:
         return self.num_arestas == (self.num_vertices*(self.num_vertices - 1))/2
 
     def e_conexo(self, prnt=True):
-        visitados = self.dfs_iterativo(self.array_vertices[0].indice)
+        visitados = self.dfs_iterativo()
         if len(visitados) > 1:
             conexo = len(visitados) == self.num_vertices
         else:
@@ -244,12 +244,10 @@ class Grafo:
         return conexo
     
     def kosaraju(self):
-        componentes = self.dfs_iterativo(self.array_vertices[0].indice)
-
+        componentes = self.dfs_iterativo()
         print(f"Componentes fortemente conexos: {componentes}")
         return componentes
 
-    
     def conectividade(self):
         if self.e_conexo(False):
             print("O grafo e fortemente conexo")
@@ -257,7 +255,7 @@ class Grafo:
             print("O grafo e deconexo")
 
     def e_ponte(self, u, v, prnt=True):
-        if self.e_conexo():
+        if self.e_conexo(False):
             aresta = (u, v)
             self.remover_aresta(aresta) 
             conexo_sem_aresta = self.e_conexo(False)  
@@ -596,7 +594,7 @@ class Grafo:
                 return False
         return True
     
-    def dfs_iterativo(self, u):
+    def dfs_iterativo(self):
         visitados = [False] * self.num_vertices
         ordem_visita = []
         while False in visitados:
@@ -664,14 +662,15 @@ class Direcionado(Grafo):
             newAresta = []
             for i in range(self.num_vertices):
                 if i == u.indice:
-                    newAresta.append(1)
-                elif i == v.indice:
                     newAresta.append(-1)
+                elif i == v.indice:
+                    newAresta.append(1)
                 else:
                     newAresta.append(0)
             self.matriz_incidencia.append(newAresta)
 
             u.grau = u.grau + 1
+            v.grau = v.grau + 1
 
             self.num_arestas = self.num_arestas + 1
             
@@ -690,7 +689,7 @@ class Direcionado(Grafo):
             self.matriz_adjacencia[u.indice][v.indice] = 0
 
             # Lista de Adjacencia
-            self.lista_adjacencia[u] = self.lista_adjacencia[u].remove(v)
+            self.lista_adjacencia[u].remove(v)
             
             # Matriz de Incidencia
             for aresta in self.matriz_incidencia:
@@ -701,6 +700,7 @@ class Direcionado(Grafo):
             self.array_arestas.remove(A)
 
             u.grau = u.grau - 1
+            v.grau = v.grau - 1
 
             self.num_arestas = self.num_arestas - 1
 
@@ -753,13 +753,28 @@ class Direcionado(Grafo):
         return self.num_arestas == (self.num_vertices*(self.num_vertices - 1))
     
     def conectividade(self):
-        componentes = self.kosaraju()
+        componentes = self.kosaraju(False)
         grafo_aux = Grafo(self.num_vertices)
         for aresta in self.array_arestas:
             grafo_aux.adicionar_aresta(aresta.V1.indice,aresta.V2.indice)
         if len(componentes) == 1:
             print('O grafo é fortemente conexo')
-        elif grafo_aux.e_conexo():
+        elif grafo_aux.e_conexo(False):
             print('O grafo é semi-fortemente conexo')
         else:
             print('O grafo é desconexo')
+
+    def kosaraju(self,prnt=True):
+            # Passo 1: DFS normal (usando o novo dfs_iterativo para obter a ordem de saída)
+            visitados = self.dfs_iterativo()  # Ordem de visita do grafo original
+            ordem = list(reversed(visitados))  # Ordem inversa para a segunda DFS
+            # Passo 2: Transpor o grafo
+            grafo_transposto = Direcionado(self.num_vertices)
+            for aresta in self.array_arestas:
+                grafo_transposto.adicionar_aresta(aresta.V2.indice, aresta.V1.indice)
+            # Passo 3: DFS no grafo transposto na ordem inversa
+            componentes = grafo_transposto.dfs_iterativo()
+
+            if prnt:
+                print(f"Componentes fortemente conexos: {componentes}")
+            return componentes
