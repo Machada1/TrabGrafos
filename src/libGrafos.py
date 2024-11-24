@@ -42,10 +42,11 @@ class Grafo:
         self.array_vertices = []
         for i in range(num_vertices):
             self.array_vertices.append(Vertice(i))
-        self.array_arestas = []
+        self.array_arestas = set()
         self.matriz_adjacencia = [[0] * num_vertices for _ in range(num_vertices)]
         self.matriz_incidencia = []
-        self.lista_adjacencia = {vertice: [] for vertice in self.array_vertices}
+        self.lista_adjacencia = {vertice: set() for vertice in self.array_vertices}  
+
 
     def rotular_vertices(self,rotulos):
         if self.elementos_unicos(rotulos):
@@ -173,15 +174,16 @@ class Grafo:
         if self.achar_vertice(u) != -1 and self.achar_vertice(v) != -1:
             V1 = self.array_vertices[self.achar_vertice(u)]
             V2 = self.array_vertices[self.achar_vertice(v)]
-            if V1 in self.lista_adjacencia[V2] or V2 in self.lista_adjacencia[V1]:
-                print(f"Os vertices {u} e {v} sao adjacentes")
+            if V2 in self.lista_adjacencia[V1] or V1 in self.lista_adjacencia[V2]:  
+                print(f"Os vértices {u} e {v} são adjacentes")
                 return True
             else:
-                print(f"Os vertices {u} e {v} nao sao adjacentes")
+                print(f"Os vértices {u} e {v} não são adjacentes")
                 return False
         else:
-            print(f'Um dos vertices selecionados nao existe, logo eles nao sao adjacentes')
+            print(f'Um dos vértices selecionados não existe, logo eles não são adjacentes')
             return False
+
 
     def sao_adjacentesA(self, aresta1, aresta2):
         if self.achar_aresta(aresta1) != -1 and self.achar_aresta(aresta2) != -1:

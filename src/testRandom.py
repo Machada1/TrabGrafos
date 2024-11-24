@@ -2,32 +2,31 @@ import time
 from libGrafos import Grafo
 
 def testar_graforandom(tamanhos):
-    resultados = {}  # Para armazenar os tempos de execução
+    resultados = []  # Lista para armazenar os tempos de execução e arestas geradas
 
     for n in tamanhos:
-        print(f"\nTestando grafo aleatório com {n} vértices:")
+        # Inicializando o grafo e medindo o tempo
         grafo = Grafo(n)
-
-        start_time = time.time()
+        start_time = time.perf_counter()
         grafo.graforandom() 
-        end_time = time.time()
+        end_time = time.perf_counter()
 
+        # Calculando o tempo de execução
         tempo_execucao = end_time - start_time
-        print(f"Tempo de geração para {n} vértices: {tempo_execucao:.5f} segundos")
+        num_arestas = grafo.num_arestas
 
-        resultados[n] = tempo_execucao
-
-        print(f"Vértices: {grafo.num_vertices}, Arestas: {grafo.num_arestas}")
+        # Armazenando os resultados
+        resultados.append((n, tempo_execucao, num_arestas))
 
     return resultados
 
 # Definindo os tamanhos a serem testados
-tamanhos = [5, 10, 50, 100, 500, 1000, 5000, 10000, 50000, 100000]
+tamanhos = [5, 10, 50, 100, 500, 1000, 5000, 10000]  # Ajuste para evitar tamanhos excessivos
 
 if __name__ == "__main__":
     resultados = testar_graforandom(tamanhos)
 
     # Exibindo os resultados finais
     print("\nResumo dos tempos de geração:")
-    for n, tempo in resultados.items():
-        print(f"{n} vértices: {tempo:.5f} segundos")
+    for n, tempo, arestas in resultados:
+        print(f"{n} vértices: {tempo:.5f} segundos, {arestas} arestas geradas")
