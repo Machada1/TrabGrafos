@@ -315,7 +315,7 @@ class Grafo:
         start_time = time.time()
         if num_arestas == 0:
             max_arestas = random.randint(1, ((self.num_vertices * (self.num_vertices - 1)) // 2))
-            num_arestas = max(1, max_arestas // 1)
+            num_arestas = max(1, max_arestas // 500)
         if num_arestas > (self.num_vertices * (self.num_vertices - 1)) // 2:
             print("Número de arestas excede o máximo possível para um grafo simples.")
             return
