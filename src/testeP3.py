@@ -1,8 +1,9 @@
 import os
 from libGrafos import Grafo
+from libGrafos import Direcionado
 
 def testar_grafo_gexf():
-    grafo = Grafo(3)
+    grafo = Direcionado(3)
 
     grafo.rotular_vertices(["A", "B", "C"])
     
