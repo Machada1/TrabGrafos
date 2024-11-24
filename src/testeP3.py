@@ -1,8 +1,9 @@
 import os
 from libGrafos import Grafo
+from libGrafos import Direcionado
 
 def testar_grafo_gexf():
-    grafo = Grafo(3)
+    grafo = Direcionado(3)
 
     grafo.rotular_vertices(["A", "B", "C"])
     
@@ -14,7 +15,7 @@ def testar_grafo_gexf():
 
     grafo.ponderar_arestas({23,24,25})
 
-    nome_arquivo = "Lastdance16.gexf"
+    nome_arquivo = "Lastdance20.gexf"
     
     grafo.salvar_grafo_gexf(nome_arquivo)
     

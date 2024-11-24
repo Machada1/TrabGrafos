@@ -315,7 +315,7 @@ class Grafo:
         start_time = time.time()
         if num_arestas == 0:
             max_arestas = random.randint(1, ((self.num_vertices * (self.num_vertices - 1)) // 2))
-            num_arestas = max(1, max_arestas // 1)
+            num_arestas = max(1, max_arestas // 100)
         if num_arestas > (self.num_vertices * (self.num_vertices - 1)) // 2:
             print("Número de arestas excede o máximo possível para um grafo simples.")
             return
@@ -745,21 +745,23 @@ class Direcionado(Grafo):
             f.write('    <nodes>\n')
             for vertice in self.array_vertices:
                 rotulo = vertice.rotulo if vertice.rotulo else vertice.indice
-                f.write(f'      <node id="{vertice.indice}" label="{rotulo}"/>\n')
+                peso = vertice.peso if vertice.peso else vertice.indice
+                f.write(f'      <node id="{vertice.indice}" label="{rotulo}"/>  weight="{peso}"/> \n')
             f.write('    </nodes>\n')
 
             # Adicionando arestas
             f.write('    <edges>\n')
             edge_id = 0
             for aresta in self.array_arestas:
-                u, v = aresta.Vsaida, aresta.Vchegada
-                peso = aresta.peso if aresta.peso is not None else 1
-                if u < v: 
-                    f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" weight="{peso}"/>\n')
-                    edge_id += 1
+                u, v = aresta.V1.indice, aresta.V2.indice 
+                peso = aresta.peso 
+                print(peso)
+                f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" label="{peso}"/>\n')
+                edge_id += 1
             f.write('    </edges>\n')
             f.write('  </graph>\n')
             f.write('</gexf>\n')
+
 
     def achar_aresta(self, valor):
         for i, aresta in enumerate(self.array_arestas):
