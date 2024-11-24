@@ -607,7 +607,6 @@ class Grafo:
     def dfs_iterativo(self):
         visitados = [False] * self.num_vertices
         ordem_visita = []
-        self.imprimir_lista_adjacencia()
         while False in visitados:
             vertice = self.array_vertices[visitados.index(False)]
             stack = [vertice]
