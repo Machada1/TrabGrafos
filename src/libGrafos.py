@@ -253,7 +253,7 @@ class Grafo:
             print("O grafo e deconexo")
 
     def e_ponte(self, u, v, prnt=True):
-        if self.e_conexo():
+        if self.e_conexo(False):
             aresta = (u, v)
             self.remover_aresta(aresta) 
             conexo_sem_aresta = self.e_conexo(False)  
@@ -698,7 +698,11 @@ class Direcionado(Grafo):
             self.array_arestas.remove(A)
 
             u.grau = u.grau - 1
+<<<<<<< HEAD
             v.grau = v.grau + 1
+=======
+            v.grau = v.grau - 1
+>>>>>>> e559c66ed19d5dd780c74eedb8b220214368e1e3
 
             self.num_arestas = self.num_arestas - 1
 
