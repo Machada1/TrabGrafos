@@ -40,7 +40,7 @@ def testar_fleury(tamanhos):
     return resultados
 
 # Tamanhos de grafos a serem testados
-tamanhos = [5, 10, 50, 100, 500, 1000, 2000, 10000, 100000]
+tamanhos = [5, 10, 50, 100, 500, 750, 1000, 2000, 5000, 10000, 20000, 50000, 100000]
 
 if __name__ == "__main__":
     resultados = testar_fleury(tamanhos)

@@ -24,6 +24,7 @@ dir.adicionar_aresta(2,3) #Semi Euleriano
 dir.adicionar_aresta(3,0) #Euleriano
 dir.adicionar_aresta(1,3) #Não euleriano
 
-dir.euleriano()
+print(dir.euleriano())
+dir.fleury_naive()
 dir.fleury_tarjan()
 dir.fleury_naive()
