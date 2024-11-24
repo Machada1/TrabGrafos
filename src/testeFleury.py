@@ -8,7 +8,7 @@ grafo.adicionar_aresta(0,1) # Semi Euleriano
 grafo.adicionar_aresta(1,2) # Semi Euleriano
 grafo.adicionar_aresta(2,3) # Semi Euleriano
 grafo.adicionar_aresta(3,0) # Euleriano
-#grafo.adicionar_aresta(1,3) # Não Euleriano
+grafo.adicionar_aresta(1,3) # Não Euleriano
 
 grafo.fleury_naive()
 grafo.fleury_tarjan()
