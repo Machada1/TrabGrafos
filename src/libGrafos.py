@@ -361,25 +361,37 @@ class Grafo:
     
         
     def tarjan_ponte_util(self, u, visitados, disc, low, parent, pontes):
-        visitados[u] = True
-        disc[u] = low[u] = self.time
-        self.time += 1
+        stack = [(u, None, iter(self.lista_adjacencia[self.array_vertices[u]]))]  # Pilha de simulação (vértice, pai, iterador)
 
-        for vertice in self.lista_adjacencia[self.array_vertices[u]]:
-            v = vertice.indice
-            if not visitados[v]:
-                parent[v] = u
-                self.tarjan_ponte_util(v, visitados, disc, low, parent, pontes)
+        while stack:
+            u, pai, adj_iter = stack[-1]  # Pega o estado atual da pilha
 
-                low[u] = min(low[u], low[v])
+            if not visitados[u]:  # Primeira vez visitando u
+                visitados[u] = True
+                disc[u] = low[u] = self.time
+                self.time += 1
 
-                # Se o menor vertice alcançável a partir de v for
-                # abaixo de u em DFS, então u-v e uma ponte
-                if low[v] > disc[u]:
-                    pontes.append((u, v))
+            try:
+                # Tenta pegar o próximo vizinho de u
+                vertice = next(adj_iter)
+                v = vertice.indice
 
-            elif v != parent[u]:  # Atualiza low[u] para o caso de um ciclo
-                low[u] = min(low[u], disc[v])
+                if not visitados[v]:
+                    parent[v] = u
+                    stack.append((v, u, iter(self.lista_adjacencia[self.array_vertices[v]])))  # Simula a chamada recursiva
+                elif v != pai:  # Caso de ciclo
+                    low[u] = min(low[u], disc[v])
+
+            except StopIteration:
+                # Se todos os vizinhos foram processados, calcula low e verifica pontes
+                stack.pop()
+
+                if pai is not None:  # Não processa se for o vértice raiz
+                    low[pai] = min(low[pai], low[u])
+
+                    if low[u] > disc[pai]:  # Verifica a condição de ponte
+                        pontes.append((pai, u))
+
 
 
 
