@@ -143,7 +143,7 @@ class Grafo:
         for vizinho in adjacentes:
             vizinhos.append(vizinho)
         for item in vizinhos:
-            self.remover_aresta((vertice.indice,item.indice))
+            self.remover_aresta((vertice.indice, item.indice))
         del self.lista_adjacencia[vertice]
         self.num_vertices = self.num_vertices - 1
         self.array_vertices.pop(vertice.indice)
@@ -363,25 +363,37 @@ class Grafo:
     
         
     def tarjan_ponte_util(self, u, visitados, disc, low, parent, pontes):
-        visitados[u] = True
-        disc[u] = low[u] = self.time
-        self.time += 1
+        stack = [(u, None, iter(self.lista_adjacencia[self.array_vertices[u]]))]  # Pilha de simulação (vértice, pai, iterador)
 
-        for vertice in self.lista_adjacencia[self.array_vertices[u]]:
-            v = vertice.indice
-            if not visitados[v]:
-                parent[v] = u
-                self.tarjan_ponte_util(v, visitados, disc, low, parent, pontes)
+        while stack:
+            u, pai, adj_iter = stack[-1]  # Pega o estado atual da pilha
 
-                low[u] = min(low[u], low[v])
+            if not visitados[u]:  # Primeira vez visitando u
+                visitados[u] = True
+                disc[u] = low[u] = self.time
+                self.time += 1
 
-                # Se o menor vertice alcançável a partir de v for
-                # abaixo de u em DFS, então u-v e uma ponte
-                if low[v] > disc[u]:
-                    pontes.append((u, v))
+            try:
+                # Tenta pegar o próximo vizinho de u
+                vertice = next(adj_iter)
+                v = vertice.indice
 
-            elif v != parent[u]:  # Atualiza low[u] para o caso de um ciclo
-                low[u] = min(low[u], disc[v])
+                if not visitados[v]:
+                    parent[v] = u
+                    stack.append((v, u, iter(self.lista_adjacencia[self.array_vertices[v]])))  # Simula a chamada recursiva
+                elif v != pai:  # Caso de ciclo
+                    low[u] = min(low[u], disc[v])
+
+            except StopIteration:
+                # Se todos os vizinhos foram processados, calcula low e verifica pontes
+                stack.pop()
+
+                if pai is not None:  # Não processa se for o vértice raiz
+                    low[pai] = min(low[pai], low[u])
+
+                    if low[u] > disc[pai]:  # Verifica a condição de ponte
+                        pontes.append((pai, u))
+
 
 
 
@@ -459,7 +471,7 @@ class Grafo:
                 v = grafo_aux.array_vertices[0]
         caminho.append(v.indice)
         while grafo_aux.num_arestas > 0:
-            if v.grau > 1:
+            if len(grafo_aux.lista_adjacencia[v]) > 1:
                 for vizinho in grafo_aux.lista_adjacencia[v]:
                     if not grafo_aux.e_ponte(v.indice, vizinho.indice, False):
                         caminho.append(vizinho.indice)
@@ -706,6 +718,21 @@ class Direcionado(Grafo):
 
         else:
             print('A aresta selecionada nao existe')
+
+    def remover_vertice(self,v):
+        vertice = self.array_vertices[self.achar_vertice(v)]
+        adjacentes = self.lista_adjacencia[vertice]
+        vizinhos = []
+        for vizinho in adjacentes:
+            vizinhos.append(vizinho)
+        for item in vizinhos:
+            self.remover_aresta((vertice.indice, item.indice))
+        for chave,valor in self.lista_adjacencia.items():
+            if vertice in valor:
+                self.remover_aresta((chave.indice,vertice.indice))
+        del self.lista_adjacencia[vertice]
+        self.num_vertices = self.num_vertices - 1
+        self.array_vertices.pop(vertice.indice)
 
     # Salvar o grafo no formato GEXF
     def salvar_grafo_gexf(self, nome_arquivo):
