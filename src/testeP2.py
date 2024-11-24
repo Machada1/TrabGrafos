@@ -10,7 +10,7 @@ def testar_grafos(tamanhos):
         grafo = Grafo(n)
         grafo.graforandom()  
         
-        # Teste do método ingênuo
+        ## Teste do método ingênuo
         # start_time = time.time()
         # ponte_naive = []
         # for aresta in grafo.array_arestas:
@@ -25,19 +25,19 @@ def testar_grafos(tamanhos):
         end_time = time.time()
         print(f"Tempo Tarjan para {n} vértices: {end_time - start_time:.5f} segundos")
 
-        # Armazenar os resultados no dicionário
+        ## Armazenar os resultados no dicionário
         resultados[n] = {
             #"pontes_naive": ponte_naive,
             "pontes_tarjan": pontes_tarjan,
         }
     return resultados
 
-# Defina os tamanhos de grafo a serem testados
-tamanhos = [10,100,1000,10000,100000]
+## Tamanhos de grafo a serem testados
+tamanhos = [5, 10, 50, 100, 500, 1000, 2000, 5000, 10000, 50000,100000]
 
 if __name__ == "__main__":
     resultados = testar_grafos(tamanhos)
     for n, res in resultados.items():
         print(f"Resultados para grafo com {n} vértices:")
-       # print(f"Pontes (Naive): {res['pontes_naive']}")
+        #print(f"Pontes (Naive): {res['pontes_naive']}")
         print(f"Pontes (Tarjan): {res['pontes_tarjan']}")
