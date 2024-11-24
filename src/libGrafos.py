@@ -142,7 +142,7 @@ class Grafo:
         for vizinho in adjacentes:
             vizinhos.append(vizinho)
         for item in vizinhos:
-            self.remover_aresta((vertice.indice,item.indice))
+            self.remover_aresta((vertice.indice, item.indice))
         del self.lista_adjacencia[vertice]
         self.num_vertices = self.num_vertices - 1
         self.array_vertices.pop(vertice.indice)
@@ -607,6 +607,7 @@ class Grafo:
     def dfs_iterativo(self):
         visitados = [False] * self.num_vertices
         ordem_visita = []
+        self.imprimir_lista_adjacencia()
         while False in visitados:
             vertice = self.array_vertices[visitados.index(False)]
             stack = [vertice]
@@ -716,6 +717,21 @@ class Direcionado(Grafo):
 
         else:
             print('A aresta selecionada nao existe')
+
+    def remover_vertice(self,v):
+        vertice = self.array_vertices[self.achar_vertice(v)]
+        adjacentes = self.lista_adjacencia[vertice]
+        vizinhos = []
+        for vizinho in adjacentes:
+            vizinhos.append(vizinho)
+        for item in vizinhos:
+            self.remover_aresta((vertice.indice, item.indice))
+        for chave,valor in self.lista_adjacencia.items():
+            if vertice in valor:
+                self.remover_aresta((chave.indice,vertice.indice))
+        del self.lista_adjacencia[vertice]
+        self.num_vertices = self.num_vertices - 1
+        self.array_vertices.pop(vertice.indice)
 
     # Salvar o grafo no formato GEXF
     def salvar_grafo_gexf(self, nome_arquivo):
