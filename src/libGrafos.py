@@ -335,61 +335,35 @@ class Grafo:
         end_time = time.time()
         print(f"Grafo aleatório gerado em: {end_time - start_time:.5f} segundos")
         print(f"Grafo aleatório gerado com {num_arestas} arestas.")
-
-    # def graforandom(self, num_arestas=0):
-    #     start_time = time.time()
-
-    #     if num_arestas == 0:
-    #         max_arestas = (self.num_vertices * (self.num_vertices - 1)) // 2
-    #         num_arestas = max(1, max_arestas // 1)
-
-    #     if num_arestas > (self.num_vertices * (self.num_vertices - 1)) // 2:
-    #         print("Número de arestas excede o máximo possível para um grafo simples.")
-    #         return
-
-    #     todas_arestas = [(u, v) for u in range(self.num_vertices) for v in range(u + 1, self.num_vertices)]
-
-    #     random.shuffle(todas_arestas)
-
-    #     for u, v in todas_arestas[:num_arestas]:
-    #         self.adicionar_aresta(u, v)
-
-    #     end_time = time.time()
-    #     print(f"Grafo aleatório gerado em: {end_time - start_time:.5f} segundos")
-    #     print(f"Grafo aleatorio gerado com {num_arestas} arestas.")
-
-    
         
     def tarjan_ponte_util(self, u, visitados, disc, low, parent, pontes):
-        stack = [(u, None, iter(self.lista_adjacencia[self.array_vertices[u]]))]  # Pilha de simulação (vértice, pai, iterador)
+        stack = [(u, None, iter(self.lista_adjacencia[self.array_vertices[u]]))]
 
         while stack:
-            u, pai, adj_iter = stack[-1]  # Pega o estado atual da pilha
+            u, pai, adj_iter = stack[-1]
 
-            if not visitados[u]:  # Primeira vez visitando u
+            if not visitados[u]: 
                 visitados[u] = True
                 disc[u] = low[u] = self.time
                 self.time += 1
 
             try:
-                # Tenta pegar o próximo vizinho de u
                 vertice = next(adj_iter)
                 v = vertice.indice
 
                 if not visitados[v]:
                     parent[v] = u
-                    stack.append((v, u, iter(self.lista_adjacencia[self.array_vertices[v]])))  # Simula a chamada recursiva
-                elif v != pai:  # Caso de ciclo
+                    stack.append((v, u, iter(self.lista_adjacencia[self.array_vertices[v]])))
+                elif v != pai:
                     low[u] = min(low[u], disc[v])
 
             except StopIteration:
-                # Se todos os vizinhos foram processados, calcula low e verifica pontes
                 stack.pop()
 
-                if pai is not None:  # Não processa se for o vértice raiz
+                if pai is not None: 
                     low[pai] = min(low[pai], low[u])
 
-                    if low[u] > disc[pai]:  # Verifica a condição de ponte
+                    if low[u] > disc[pai]:
                         pontes.append((pai, u))
 
 
@@ -486,7 +460,6 @@ class Grafo:
         else:
             print("O grafo e semi-euleriano")
 
-    # Salvar o grafo no formato GEXF
     def salvar_grafo_gexf(self, nome_arquivo):
         with open(nome_arquivo, 'w') as f:
             f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
@@ -732,7 +705,6 @@ class Direcionado(Grafo):
         self.num_vertices = self.num_vertices - 1
         self.array_vertices.pop(vertice.indice)
 
-    # Salvar o grafo no formato GEXF
     def salvar_grafo_gexf(self, nome_arquivo):
         with open(nome_arquivo, 'w') as f:
             f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
@@ -791,14 +763,10 @@ class Direcionado(Grafo):
             print('O grafo é desconexo')
 
     def kosaraju(self,prnt=True):
-            # Passo 1: DFS normal (usando o novo dfs_iterativo para obter a ordem de saída)
-            visitados = self.dfs_iterativo()  # Ordem de visita do grafo original
-            ordem = list(reversed(visitados))  # Ordem inversa para a segunda DFS
-            # Passo 2: Transpor o grafo
             grafo_transposto = Direcionado(self.num_vertices)
             for aresta in self.array_arestas:
                 grafo_transposto.adicionar_aresta(aresta.V2.indice, aresta.V1.indice)
-            # Passo 3: DFS no grafo transposto na ordem inversa
+
             componentes = grafo_transposto.dfs_iterativo()
 
             if prnt:
