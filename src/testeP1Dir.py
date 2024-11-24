@@ -1,20 +1,17 @@
 from libGrafos import Grafo, Direcionado
 
-Dir = Direcionado(4)
-#Dir.rotular_vertices(["A", "B", "C"])
-#Dir.ponderar_vertices([1,2,3])
+Dir = Direcionado(7)
 
 Dir.adicionar_aresta(0,1)
-Dir.adicionar_aresta(2,3)
-#Dir.adicionar_aresta(2,0)
-# Dir.imprimir_lista_adjacencia()
-# Dir.imprimir_matriz_adjacencia()
-# Dir.imprimir_matriz_incidencia()
-Dir.adicionar_aresta(0,1,"AB",5)
-Dir.adicionar_aresta(1,2,"BC",10)
-Dir.adicionar_aresta(2,0,"CA",1)
-
-Dir.e_conexo()
+Dir.adicionar_aresta(1,4)
+Dir.adicionar_aresta(4,2)
+Dir.adicionar_aresta(2,1)
+Dir.adicionar_aresta(0,3)
+Dir.adicionar_aresta(4,6)
+Dir.adicionar_aresta(6,5)
+Dir.adicionar_aresta(5,6)
+Dir.adicionar_aresta(2,5)
+Dir.adicionar_aresta(3,5)
 
 Dir.imprimir_lista_adjacencia()
 Dir.imprimir_matriz_adjacencia()
