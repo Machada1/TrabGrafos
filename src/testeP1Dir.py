@@ -6,7 +6,7 @@ Dir = Direcionado(4)
 
 Dir.adicionar_aresta(0,1)
 Dir.adicionar_aresta(2,3)
-#Dir.adicionar_aresta(2,0)
+# Dir.adicionar_aresta(2,0)
 # Dir.imprimir_lista_adjacencia()
 # Dir.imprimir_matriz_adjacencia()
 # Dir.imprimir_matriz_incidencia()
@@ -16,9 +16,9 @@ Dir.adicionar_aresta(2,0,"CA",1)
 
 Dir.e_conexo()
 
-Dir.imprimir_lista_adjacencia()
-Dir.imprimir_matriz_adjacencia()
-Dir.imprimir_matriz_incidencia()
+# Dir.imprimir_lista_adjacencia()
+# Dir.imprimir_matriz_adjacencia()
+# Dir.imprimir_matriz_incidencia()
 
 # Dir.sao_adjacentesA((0,1),(1,2))
 # Dir.sao_adjacentesA((1,2),(2,0))
