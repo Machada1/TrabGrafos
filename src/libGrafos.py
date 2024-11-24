@@ -457,7 +457,7 @@ class Grafo:
                 v = grafo_aux.array_vertices[0]
         caminho.append(v.indice)
         while grafo_aux.num_arestas > 0:
-            if v.grau > 1:
+            if len(grafo_aux.lista_adjacencia[v]) > 1:
                 for vizinho in grafo_aux.lista_adjacencia[v]:
                     if not grafo_aux.e_ponte(v.indice, vizinho.indice, False):
                         caminho.append(vizinho.indice)
