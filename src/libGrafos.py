@@ -3,6 +3,33 @@ import copy
 import time
 import xml.etree.ElementTree as ET
 
+def process_gexf(file_path):
+
+    tree = ET.parse(file_path)
+    root = tree.getroot()
+
+    namespace = {'ns': 'http://gexf.net/1.3'}
+
+    graph_element = root.find(".//ns:graph", namespace)
+    nodes = {}
+    edges = []
+
+    defaultedgetype = graph_element.attrib.get("defaultedgetype")
+
+    for node in root.findall('.//ns:node', namespace):
+        node_id = node.attrib['id']
+        label = node.attrib.get('label', '')
+        nodes[node_id] = {'label': label}
+
+    for edge in root.findall('.//ns:edge', namespace):
+        edge_id = edge.attrib['id']
+        source = edge.attrib['source']
+        target = edge.attrib['target']
+        label = edge.attrib.get('label', '')
+        edges.append({'id': edge_id, 'source': source, 'target': target, 'label': label})
+
+    return nodes, edges , defaultedgetype
+
 class Vertice:
     def __init__(self, indice, rotulo=None, peso=None):
         self.indice = indice
@@ -475,9 +502,9 @@ class Grafo:
     def salvar_grafo_gexf(self, nome_arquivo):
         with open(nome_arquivo, 'w') as f:
             f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-            f.write('<gexf xmlns="http://www.gexf.net/1.3draft"\n')
+            f.write('<gexf xmlns="http://gexf.net/1.3"\n')
             f.write('     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n')
-            f.write('     xsi:schemaLocation="http://www.gexf.net/1.3draft http://www.gexf.net/1.3draft/gexf.xsd">\n')
+            f.write('     xsi:schemaLocation="http://gexf.net/1.3 http://gexf.net/1.3/gexf.xsd">\n')
             f.write('  <graph mode="static" defaultedgetype="undirected">\n')
             
             # Adicionando nós
@@ -719,9 +746,9 @@ class Direcionado(Grafo):
     def salvar_grafo_gexf(self, nome_arquivo):
         with open(nome_arquivo, 'w') as f:
             f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-            f.write('<gexf xmlns="http://www.gexf.net/1.3draft"\n')
+            f.write('<gexf xmlns="http://gexf.net/1.3"\n')
             f.write('     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n')
-            f.write('     xsi:schemaLocation="http://www.gexf.net/1.3draft http://www.gexf.net/1.3draft/gexf.xsd">\n')
+            f.write('     xsi:schemaLocation="http://gexf.net/1.3 http://gexf.net/1.3/gexf.xsd">\n')
             f.write('  <graph mode="static" defaultedgetype="directed">\n')
             
             # Adicionando nós
