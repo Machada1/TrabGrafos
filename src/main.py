@@ -41,7 +41,7 @@ def main():
 
             if op == 1:
                 file = input("Insira o nome do arquivo:")
-                file_path = f"../TrabGrafos/{file}"
+                file_path = f"../../TrabGrafos/src/gexfs/{file}"
 
                 nodes, edges , tipo = process_gexf(file_path)
                 indices = []
@@ -92,11 +92,11 @@ def main():
                 tipo = int(input("Qual o tipo do Grafo? 1 para não direcionado, 2 para direcionado"))
                 n = int(input("Digite o número de vértices do grafo: "))
                 if tipo == 2:
-                    grafo = Direcionado(n_vertices)
+                    grafo = Direcionado(n)
                 else:
-                    grafo = Grafo(n_vertices)
+                    grafo = Grafo(n)
                 grafo.grafo_linear()
-                print(f"Grafo linear criado com {n_vertices} vértices e {n_vertices - 1} arestas.")
+                print(f"Grafo linear criado com {n} vértices e {n - 1} arestas.")
 
         else:
             if op == 1 or op == 2 or op == 3 or op == 4:
