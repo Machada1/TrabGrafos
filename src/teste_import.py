@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-from libGrafos import Grafo,Direcionado
+from libGrafos import Grafo
 
 def process_gexf(file_path):
 
@@ -26,9 +26,10 @@ def process_gexf(file_path):
 
     return nodes, edges
 
-file_path = "D:/programacao/trabalhos/TrabGrafos/src/teste.gexf"
+file_path = "../TrabGrafos/nãoDirecionado"
 
 nodes, edges = process_gexf(file_path)
+
 indices = []
 rotulos = []
 pesos = []
@@ -48,4 +49,7 @@ for aresta in edges:
     peso = aresta['label']
     grafo.adicionar_aresta(u,v,None,peso)
 
-grafo.imprimir_arestas()
+
+grafo.fleury_tarjan()
+grafo.fleury_naive()
+grafo.kosaraju()
