@@ -1,6 +1,7 @@
 import random
 import copy
 import time
+import xml.etree.ElementTree as ET
 
 class Vertice:
     def __init__(self, indice, rotulo=None, peso=None):
@@ -335,6 +336,17 @@ class Grafo:
         end_time = time.time()
         print(f"Grafo aleatório gerado em: {end_time - start_time:.5f} segundos")
         print(f"Grafo aleatório gerado com {num_arestas} arestas.")
+
+
+    def grafo_linear(self, num_vertices):
+        arestas_set = set()
+
+        for i in range(num_vertices - 1):
+            self.adicionar_aresta_otimizado(i, i + 1,arestas_set)
+
+        print(f"Grafo linear gerado com {num_vertices} vértices e {num_vertices - 1} arestas.")   
+
+
         
     def tarjan_ponte_util(self, u, visitados, disc, low, parent, pontes):
         stack = [(u, None, iter(self.lista_adjacencia[self.array_vertices[u]]))]
