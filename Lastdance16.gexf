@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.3draft"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.gexf.net/1.3draft http://www.gexf.net/1.3draft/gexf.xsd">
+  <graph mode="static" defaultedgetype="directed">
+    <nodes>
+      <node id="0" label="A"/>
+      <node id="1" label="B"/>
+      <node id="2" label="C"/>
+    </nodes>
+    <edges>
