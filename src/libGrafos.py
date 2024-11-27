@@ -485,7 +485,7 @@ class Grafo:
             for vertice in self.array_vertices:
                 rotulo = vertice.rotulo if vertice.rotulo else vertice.indice
                 peso = vertice.peso if vertice.peso else vertice.indice
-                f.write(f'      <node id="{vertice.indice}" label="{rotulo}"/>  weight="{peso}"/> \n')
+                f.write(f'      <node id="{vertice.indice}" label="{rotulo}"  weight="{peso}"/> \n')
             f.write('    </nodes>\n')
 
             # Adicionando arestas
