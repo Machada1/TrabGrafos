@@ -338,13 +338,13 @@ class Grafo:
         print(f"Grafo aleatório gerado com {num_arestas} arestas.")
 
 
-    def grafo_linear(self, num_vertices):
+    def grafo_linear(self):
         arestas_set = set()
 
-        for i in range(num_vertices - 1):
+        for i in range(self.num_vertices - 1):
             self.adicionar_aresta_otimizado(i, i + 1,arestas_set)
 
-        print(f"Grafo linear gerado com {num_vertices} vértices e {num_vertices - 1} arestas.")   
+        print(f"Grafo linear gerado com {self.num_vertices} vértices e {self.num_vertices - 1} arestas.")   
 
 
         
@@ -494,7 +494,6 @@ class Grafo:
             for aresta in self.array_arestas:
                 u, v = aresta.V1.indice, aresta.V2.indice 
                 peso = aresta.peso 
-                print(peso)
                 f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" label="{peso}"/>\n')
                 edge_id += 1
             f.write('    </edges>\n')
@@ -730,7 +729,7 @@ class Direcionado(Grafo):
             for vertice in self.array_vertices:
                 rotulo = vertice.rotulo if vertice.rotulo else vertice.indice
                 peso = vertice.peso if vertice.peso else vertice.indice
-                f.write(f'      <node id="{vertice.indice}" label="{rotulo}"/>  weight="{peso}"/> \n')
+                f.write(f'      <node id="{vertice.indice}" label="{rotulo}"  weight="{peso}"/> \n')
             f.write('    </nodes>\n')
 
             # Adicionando arestas
@@ -739,7 +738,6 @@ class Direcionado(Grafo):
             for aresta in self.array_arestas:
                 u, v = aresta.V1.indice, aresta.V2.indice 
                 peso = aresta.peso 
-                print(peso)
                 f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" label="{peso}"/>\n')
                 edge_id += 1
             f.write('    </edges>\n')
