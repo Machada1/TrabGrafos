@@ -142,7 +142,7 @@ class Grafo:
         for vizinho in adjacentes:
             vizinhos.append(vizinho)
         for item in vizinhos:
-            self.remover_aresta((vertice.indice,item.indice))
+            self.remover_aresta((vertice.indice, item.indice))
         del self.lista_adjacencia[vertice]
         self.num_vertices = self.num_vertices - 1
         self.array_vertices.pop(vertice.indice)
@@ -335,51 +335,37 @@ class Grafo:
         end_time = time.time()
         print(f"Grafo aleatório gerado em: {end_time - start_time:.5f} segundos")
         print(f"Grafo aleatório gerado com {num_arestas} arestas.")
-
-    # def graforandom(self, num_arestas=0):
-    #     start_time = time.time()
-
-    #     if num_arestas == 0:
-    #         max_arestas = (self.num_vertices * (self.num_vertices - 1)) // 2
-    #         num_arestas = max(1, max_arestas // 1)
-
-    #     if num_arestas > (self.num_vertices * (self.num_vertices - 1)) // 2:
-    #         print("Número de arestas excede o máximo possível para um grafo simples.")
-    #         return
-
-    #     todas_arestas = [(u, v) for u in range(self.num_vertices) for v in range(u + 1, self.num_vertices)]
-
-    #     random.shuffle(todas_arestas)
-
-    #     for u, v in todas_arestas[:num_arestas]:
-    #         self.adicionar_aresta(u, v)
-
-    #     end_time = time.time()
-    #     print(f"Grafo aleatório gerado em: {end_time - start_time:.5f} segundos")
-    #     print(f"Grafo aleatorio gerado com {num_arestas} arestas.")
-
-    
         
     def tarjan_ponte_util(self, u, visitados, disc, low, parent, pontes):
-        visitados[u] = True
-        disc[u] = low[u] = self.time
-        self.time += 1
+        stack = [(u, None, iter(self.lista_adjacencia[self.array_vertices[u]]))]
 
-        for vertice in self.lista_adjacencia[self.array_vertices[u]]:
-            v = vertice.indice
-            if not visitados[v]:
-                parent[v] = u
-                self.tarjan_ponte_util(v, visitados, disc, low, parent, pontes)
+        while stack:
+            u, pai, adj_iter = stack[-1]
 
-                low[u] = min(low[u], low[v])
+            if not visitados[u]: 
+                visitados[u] = True
+                disc[u] = low[u] = self.time
+                self.time += 1
 
-                # Se o menor vertice alcançável a partir de v for
-                # abaixo de u em DFS, então u-v e uma ponte
-                if low[v] > disc[u]:
-                    pontes.append((u, v))
+            try:
+                vertice = next(adj_iter)
+                v = vertice.indice
 
-            elif v != parent[u]:  # Atualiza low[u] para o caso de um ciclo
-                low[u] = min(low[u], disc[v])
+                if not visitados[v]:
+                    parent[v] = u
+                    stack.append((v, u, iter(self.lista_adjacencia[self.array_vertices[v]])))
+                elif v != pai:
+                    low[u] = min(low[u], disc[v])
+
+            except StopIteration:
+                stack.pop()
+
+                if pai is not None: 
+                    low[pai] = min(low[pai], low[u])
+
+                    if low[u] > disc[pai]:
+                        pontes.append((pai, u))
+
 
 
 
@@ -457,7 +443,7 @@ class Grafo:
                 v = grafo_aux.array_vertices[0]
         caminho.append(v.indice)
         while grafo_aux.num_arestas > 0:
-            if v.grau > 1:
+            if len(grafo_aux.lista_adjacencia[v]) > 1:
                 for vizinho in grafo_aux.lista_adjacencia[v]:
                     if not grafo_aux.e_ponte(v.indice, vizinho.indice, False):
                         caminho.append(vizinho.indice)
@@ -474,7 +460,6 @@ class Grafo:
         else:
             print("O grafo e semi-euleriano")
 
-    # Salvar o grafo no formato GEXF
     def salvar_grafo_gexf(self, nome_arquivo):
         with open(nome_arquivo, 'w') as f:
             f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
@@ -705,7 +690,21 @@ class Direcionado(Grafo):
         else:
             print('A aresta selecionada nao existe')
 
-    # Salvar o grafo no formato GEXF
+    def remover_vertice(self,v):
+        vertice = self.array_vertices[self.achar_vertice(v)]
+        adjacentes = self.lista_adjacencia[vertice]
+        vizinhos = []
+        for vizinho in adjacentes:
+            vizinhos.append(vizinho)
+        for item in vizinhos:
+            self.remover_aresta((vertice.indice, item.indice))
+        for chave,valor in self.lista_adjacencia.items():
+            if vertice in valor:
+                self.remover_aresta((chave.indice,vertice.indice))
+        del self.lista_adjacencia[vertice]
+        self.num_vertices = self.num_vertices - 1
+        self.array_vertices.pop(vertice.indice)
+
     def salvar_grafo_gexf(self, nome_arquivo):
         with open(nome_arquivo, 'w') as f:
             f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
@@ -718,18 +717,19 @@ class Direcionado(Grafo):
             f.write('    <nodes>\n')
             for vertice in self.array_vertices:
                 rotulo = vertice.rotulo if vertice.rotulo else vertice.indice
-                f.write(f'      <node id="{vertice.indice}" label="{rotulo}"/>\n')
+                peso = vertice.peso if vertice.peso else vertice.indice
+                f.write(f'      <node id="{vertice.indice}" label="{rotulo}"/>  weight="{peso}"/> \n')
             f.write('    </nodes>\n')
 
             # Adicionando arestas
             f.write('    <edges>\n')
             edge_id = 0
             for aresta in self.array_arestas:
-                u, v = aresta.Vsaida, aresta.Vchegada
-                peso = aresta.peso if aresta.peso is not None else 1
-                if u < v: 
-                    f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" weight="{peso}"/>\n')
-                    edge_id += 1
+                u, v = aresta.V1.indice, aresta.V2.indice 
+                peso = aresta.peso 
+                print(peso)
+                f.write(f'      <edge id="{edge_id}" source="{u}" target="{v}" label="{peso}"/>\n')
+                edge_id += 1
             f.write('    </edges>\n')
             f.write('  </graph>\n')
             f.write('</gexf>\n')
@@ -763,14 +763,10 @@ class Direcionado(Grafo):
             print('O grafo é desconexo')
 
     def kosaraju(self,prnt=True):
-            # Passo 1: DFS normal (usando o novo dfs_iterativo para obter a ordem de saída)
-            visitados = self.dfs_iterativo()  # Ordem de visita do grafo original
-            ordem = list(reversed(visitados))  # Ordem inversa para a segunda DFS
-            # Passo 2: Transpor o grafo
             grafo_transposto = Direcionado(self.num_vertices)
             for aresta in self.array_arestas:
                 grafo_transposto.adicionar_aresta(aresta.V2.indice, aresta.V1.indice)
-            # Passo 3: DFS no grafo transposto na ordem inversa
+
             componentes = grafo_transposto.dfs_iterativo()
 
             if prnt:

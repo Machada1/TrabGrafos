@@ -17,27 +17,25 @@ Dir.imprimir_lista_adjacencia()
 Dir.imprimir_matriz_adjacencia()
 Dir.imprimir_matriz_incidencia()
 
-# Dir.sao_adjacentesA((0,1),(1,2))
-# Dir.sao_adjacentesA((0,1),(2,3))
+Dir.sao_adjacentesA((0,1),(1,2))
+Dir.sao_adjacentesA((0,1),(2,3))
 
-# Dir.existe_aresta(0,1)
-# Dir.existe_aresta(1,2)
-# Dir.existe_aresta(2,0)
-# Dir.existe_aresta(0,2)
-# Dir.existe_aresta(2,1)
-# Dir.existe_aresta(1,0)
+Dir.existe_aresta(0,1)
+Dir.existe_aresta(1,2)
+Dir.existe_aresta(2,0)
+Dir.existe_aresta(0,2)
+Dir.existe_aresta(2,1)
+Dir.existe_aresta(1,0)
 
-# Dir.numero_arestas()
-# Dir.numero_vertices()
+Dir.numero_arestas()
+Dir.numero_vertices()
 
-# Dir.grafo_vazio()
-# Dir.grafo_completo()
+Dir.grafo_vazio()
+Dir.grafo_completo()
 
-# Checa ponte
 Dir.e_ponte(2,3) #É
 Dir.e_ponte(2,0) #Não é
 
-# Checa articulação
 Dir.e_articulacao(1)
 Dir.e_articulacao(2)
 
